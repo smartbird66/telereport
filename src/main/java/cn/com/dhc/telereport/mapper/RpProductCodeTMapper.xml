@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.dhc.telereport.mapper.RpProductCodeTMapper">
+	<select id="selectAllProduct" resultType="cn.com.dhc.telereport.entity.RpProductCodeT">
+		SELECT product_code ,product_name, use_flag, use_account, use_card_sale, use_balance,use_pre_fee,
+		use_business_fee FROM rp_product_code_t
+	</select>
+</mapper>

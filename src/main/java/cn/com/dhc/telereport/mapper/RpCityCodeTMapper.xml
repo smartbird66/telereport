@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.dhc.telereport.mapper.RpCityCodeTMapper">
+	<!-- select元素表示定义一个查询语句，
+			id属性值与接口中的方法名对应，
+			resultType属性值指定实体类的全限定名 -->
+	<select id="selectAll" resultType="cn.com.dhc.telereport.entity.RpCityCodeT">
+		SELECT city_code, city_name FROM rp_city_code_t
+	</select>
+</mapper>
+<!-- 指定属性文件，该属性文件用于保存连接数据库所需要使用的driver、
+url、username、password 
+namespace与相应的mapper接口对应-->
+<!--mapper namespace="cn.com.dhc.telereport.mapper.RpCityCodeTMapper"-->
+<!--mapper namespace="cn.com.dhc.telereport.mapper.RpCityCodeTMapper"-->
+<!-- select 定义一个查询语句
+id属性与接口中的方法名对应，
+ resultType指向实体类-->
+	<!--select id="selectAll" resultType="cn.com.dhc.telereport.entity.RpCityCodeT"-->
+		<!-- SELECT city_code,city_name FROM re_city_code_t-->
+	<!--/select-->
+<!-- /mapper-->
