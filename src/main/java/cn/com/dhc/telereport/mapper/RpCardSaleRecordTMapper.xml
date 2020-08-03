@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.dhc.telereport.mapper.RpCardSaleRecordTMapper">
+	<!-- select元素表示定义一个查询语句，
+			id属性值与接口中的方法名对应，
+			resultType属性值指定实体类的全限定名 -->
+	<resultMap type="cn.com.dhc.telereport.entity.RpCardSaleRecordT" id="RpCardSaleRecordTMap">
+		<result property="id" jdbcType="VARCHAR" column="id"/>
+		<result property="discountRate" jdbcType="DOUBLE" column="discount_rate"/>
+		<result property="saleDate" jdbcType="DATE" column="sale_date"/>
+		<result property="cardSaleAmount" jdbcType="BIGINT" column="card_sale_amount"/>
+		<result property="cardParValueFee" jdbcType="DOUBLE" column="card_par_value_fee"/>
+		<result property="recordOperator" jdbcType="VARCHAR" column="record_operator"/>
+		<result property="checkStatus" jdbcType="VARCHAR" column="check_status"/>
+		<result property="checkPerson" jdbcType="VARCHAR" column="check_person"/>
+		<result property="checkTime" jdbcType="DATE" column="check_time"/>
+		<result property="totalFee" jdbcType="VARCHAR" column="total_fee"/>
+		<result property="discountFee" jdbcType="VARCHAR" column="discount_fee"/>
+		<collection property="rpCityCodeT" ofType="cn.com.dhc.telereport.entity.RpCityCodeT">
+			<result property="cityCode" jdbcType="VARCHAR" column="city_code"/>
+			<result property="cityName" jdbcType="VARCHAR" column="city_name"/>
+		</collection>
+		<collection property="rpProductCodeT" ofType="cn.com.dhc.telereport.entity.RpProductCodeT">
+			<result property="productCode" jdbcType="VARCHAR" column="product_code"/>
+			<result property="productName" jdbcType="VARCHAR" column="product_name"/>
+		</collection>
+	</resultMap>
+	<select id="selectByInfo" parameterType="cn.com.dhc.telereport.entity.RpCardSaleRecordT"
+		 resultMap="RpCardSaleRecordTMap"
+			>
+		SELECT ID,city_code,city_name,product_code,product_name,sale_date,discount_rate,
+				card_sale_amount,card_par_value_fee,record_operator,check_status,
+				check_person,check_time,total_fee,discount_fee
+		FROM rp_card_sale_record_t natural join rp_city_code_t natural join rp_product_code_t
+		<where>
+			<if test="cityCode != null and cityCode != '' ">
+				AND city_code = #{cityCode}
+
+			</if>
+			<if test="productCode != null and productCode != '' ">
+				AND product_code = #{productCode}
+			</if>
+			<if test="saleDate != null">
+				AND	DATE_FORMAT(sale_date,'%Y-%m-%d')=DATE_FORMAT(#{saleDate},'%Y-%m-%d')
+			</if>
+		</where>
+	</select>
+</mapper>

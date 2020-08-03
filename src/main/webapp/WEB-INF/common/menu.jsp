@@ -30,10 +30,10 @@
     <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
 				<div class="list-group">
 				  <a href="${pageContext.request.contextPath}/imputation/account" class="list-group-item">出账收入归集</a>
-				  <a href="#cardTo" data-toggle="tab" class="list-group-item">卡销售收入归集</a>
-				  <a href="#stored" data-toggle="tab" class="list-group-item">预存转收入归集</a>
-				  <a href="#internet" data-toggle="tab" class="list-group-item">网间收入归集</a>
-				  <a href="#messageBill" data-toggle="tab" class="list-group-item">通知单归集</a>
+				  <a href="${pageContext.request.contextPath}/imputation/cardTo" class="list-group-item">卡销售收入归集</a>
+				  <a href="${pageContext.request.contextPath}/imputation/stored" class="list-group-item">预存转收入归集</a>
+				  <a href="${pageContext.request.contextPath}/imputation/internet" class="list-group-item">网间收入归集</a>
+				  <a href="${pageContext.request.contextPath}/imputation/messageBill" class="list-group-item">通知单归集</a>
 				</div>
     </div>
   </div>

@@ -17,7 +17,7 @@ public class RpAccountFeeRecordTService {
 	
 	public List<RpAccountFeeRecordT> selectByInfo(RpAccountFeeRecordTForm rpAccountFeeRecordTForm){
 		RpAccountFeeRecordT rpAccountFeeRecordT = new RpAccountFeeRecordT();
-		//复制时要求源和目标中的数据域名、类型保持一致。
+		//复制时要求源和目标中的数据域名、类型保持一致。Form赋值给实体类
 		BeanUtils.copyProperties(rpAccountFeeRecordTForm, rpAccountFeeRecordT);
 		return rpAccountFeeRecordTMapper.selectByInfo(rpAccountFeeRecordT);
 	}

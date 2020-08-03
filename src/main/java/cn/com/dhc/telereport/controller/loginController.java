@@ -48,7 +48,7 @@ public class loginController{
 	 */
 	@RequestMapping(value="/main1", method=RequestMethod.POST)
 	public String accountOutMonth(RpAccountFeeRecordTForm rpAccountFeeRecordTForm,Model model) {
-		//调用service层的方法完成查询操作
+		//调用service层的方法完成出账录入查询操作
 		List<RpAccountFeeRecordT> accountFeeRecordList = rpAccountFeeRecordTService.selectByInfo(rpAccountFeeRecordTForm);
 		model.addAttribute("accountFeeRecordList", accountFeeRecordList);
 		
@@ -63,5 +63,13 @@ public class loginController{
 	public String accountOutMonth2(Model model) {
 		//System.out.println(rpAccountFeeRecordTForm);
 		return "imputation/account";
+	}
+	
+	/*
+	 * 该方法从index页面跳转到菜单栏页面
+	 */
+	@RequestMapping(value="/main")
+	public String toMenu() {
+		return "main";
 	}
 }

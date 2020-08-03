@@ -1,15 +1,10 @@
 package cn.com.dhc.telereport.form;
 
-import java.sql.Date;
-
-import org.springframework.format.annotation.DateTimeFormat;
-
-public class RpAccountGatherTForm {
+public class RpPreFeeGatherTForm {
 	private String accountMonth;
 	private String cityCode;
 	private String productCode;
-	private String accountTypeCode;
-	
+	private String writeOffTypeCode;
 	public String getAccountMonth() {
 		return accountMonth;
 	}
@@ -28,15 +23,16 @@ public class RpAccountGatherTForm {
 	public void setProductCode(String productCode) {
 		this.productCode = productCode;
 	}
-	public String getAccountTypeCode() {
-		return accountTypeCode;
+	public String getWriteOffTypeCode() {
+		return writeOffTypeCode;
+	}
+	public void setWriteOffTypeCode(String writeOffTypeCode) {
+		this.writeOffTypeCode = writeOffTypeCode;
 	}
 	@Override
 	public String toString() {
-		return "rpAccountGatherTForm [accountMonth=" + accountMonth + ", cityCode=" + cityCode + ", productCode="
-				+ productCode + ", accountTypeCode=" + accountTypeCode +  "]";
+		return "RpPreFeeGatherTForm [accountMonth=" + accountMonth + ", cityCode=" + cityCode + ", productCode="
+				+ productCode + ", writeOffTypeCode=" + writeOffTypeCode + "]";
 	}
-	public void setAccountTypeCode(String accountTypeCode) {
-		this.accountTypeCode = accountTypeCode;
-	}
+
 }

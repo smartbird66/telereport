@@ -32,7 +32,7 @@
 							<div id="myTabContent" class="tab-content">
 							    <div class="tab-pane fade in active" id="byMonth">
 							    	<br><br>
-						        <form class="form-horizontal" action="${pageContext.request.contextPath}/login/main1" method="post">
+						        <form class="form-horizontal" action="${pageContext.request.contextPath}/imputation/account" method="post">
 										  <div class="form-group">
 										    <label for="inputPassword3" class="col-sm-2 control-label">收入月份</label>
 										    <div class="col-sm-4">
@@ -64,20 +64,23 @@
 											 	 </b:forEach>
 										      </select>
 										    </div>
-										    <label for="inputPassword3" class="col-sm-2 control-label">产品类型</label>
+										    <label for="inputPassword3" class="col-sm-2 control-label">出账收入类型</label>
 										    <div class="col-sm-4">
-										      <select class= "form-control">
+										      <select name="accountTypeCode" id="accountTypeCode" class= "form-control">
 										      	<option value="">请选择</option>
-										      	<option>类型1</option>
-										      	<option>类型2</option>
-										      	<option>类型3</option>
+										      	<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="b" %>
+											 	 <b:forEach items="${rpAccountTypeCodeTList}" var="rpAccountTypeCodeTList">
+											 	 	<option value="${rpAccountTypeCodeTList.accountTypeCode }">${rpAccountTypeCodeTList.accountTypeName}</option>
+											 	 </b:forEach>
 										      </select>
 										    </div>
 										  </div>
 										  <div class="form-group col-sm-6">
-										    <div class="col-md-offset-1 col-sm-1">
-										      <button type="submit" class="btn btn-primary">查询</button>
-										    </div>
+										  <div class="col-sm-2">
+										  </div>
+									      <div class="col-sm-2">
+									        <button type="submit" class="btn btn-primary">查询</button>
+									      </div>
 										  </div>
 										</form>
 							    </div>
@@ -110,16 +113,19 @@
 								  	<th>产品</th>
 								  	<th>出账类型</th>
 								  	<th>录入金额</th>
+								  	<th>数据更新时间</th>
 								  	<th colspan="2">操作</th>
 								  </tr>
-								  <b:forEach items="${accountFeeRecordList}" var="accountFeeRecord">
+								  <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+								  <b:forEach items="${rpAccountGatherTList}" var="rpAccountGatherTList">
 									<tr>
 										<td><input type="checkbox"></td>
-										<td>${accountFeeRecord.accountRecordMonth}</td>
-										<td>${accountFeeRecord.cityCode}</td>
-										<td>${accountFeeRecord.productCode}</td>
-										<td>${accountFeeRecord.accountFeeTypeCode}</td>
-										<td>${accountFeeRecord.accountFee}</td>
+										<td>${rpAccountGatherTList.accountMonth}</td>
+										<td>${rpAccountGatherTList.rpCityCodeT.cityName}</td>
+										<td>${rpAccountGatherTList.rpProductCodeT.productName}</td>
+										<td>${rpAccountGatherTList.rpAccountTypeCodeT.accountTypeName}</td>
+										<td>${rpAccountGatherTList.accounFee}</td>
+										<td><fmt:formatDate type="date" value="${rpAccountGatherTList.updateTime}"/></td>
 										<td><a href="#">编辑</a></td>
 										<td><a href="#">删除</a></td>
 									</tr>

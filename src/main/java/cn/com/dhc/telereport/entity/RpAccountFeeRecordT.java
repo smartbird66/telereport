@@ -5,8 +5,11 @@ import java.util.Date;
 public class RpAccountFeeRecordT {
 	private String id;
 	private String cityCode;
+	private RpCityCodeT rpCityCodeT;
 	private String productCode;
+	private RpProductCodeT rpProductCodeT;
 	private String accountFeeTypeCode;
+	private RpAccountTypeCodeT rpAccountTypeCodeT;
 	private Date accountRecordMonth;
 	private Double accountFee;
 	private String accountOperator;
@@ -37,8 +40,27 @@ public class RpAccountFeeRecordT {
 	public void setAccountFeeTypeCode(String accountFeeTypeCode) {
 		this.accountFeeTypeCode = accountFeeTypeCode;
 	}
+	
 	public Date getAccountRecordMonth() {
 		return accountRecordMonth;
+	}
+	public RpCityCodeT getRpCityCodeT() {
+		return rpCityCodeT;
+	}
+	public void setRpCityCodeT(RpCityCodeT rpCityCodeT) {
+		this.rpCityCodeT = rpCityCodeT;
+	}
+	public RpProductCodeT getRpProductCodeT() {
+		return rpProductCodeT;
+	}
+	public void setRpProductCodeT(RpProductCodeT rpProductCodeT) {
+		this.rpProductCodeT = rpProductCodeT;
+	}
+	public RpAccountTypeCodeT getRpAccountTypeCodeT() {
+		return rpAccountTypeCodeT;
+	}
+	public void setRpAccountTypeCodeT(RpAccountTypeCodeT rpAccountTypeCodeT) {
+		this.rpAccountTypeCodeT = rpAccountTypeCodeT;
 	}
 	public void setAccountRecordMonth(Date accountRecordMonth) {
 		this.accountRecordMonth = accountRecordMonth;
@@ -73,12 +95,6 @@ public class RpAccountFeeRecordT {
 	public void setCheckTime(Date checkTime) {
 		this.checkTime = checkTime;
 	}
-	@Override
-	public String toString() {
-		return "RpAccountFeeRecordT [id=" + id + ", cityCode=" + cityCode + ", productCode=" + productCode
-				+ ", accountFeeTypeCode=" + accountFeeTypeCode + ", accountRecordMonth=" + accountRecordMonth
-				+ ", accountFee=" + accountFee + ", accountOperator=" + accountOperator + ", checkStatus=" + checkStatus
-				+ ", checkPerson=" + checkPerson + ", checkTime=" + checkTime + "]";
-	}
+
 	
 }

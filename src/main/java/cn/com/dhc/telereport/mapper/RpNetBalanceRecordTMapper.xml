@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.dhc.telereport.mapper.RpNetBalanceRecordTMapper">
+	<!-- select元素表示定义一个查询语句，
+			id属性值与接口中的方法名对应，
+			resultType属性值指定实体类的全限定名 -->
+	<resultMap type="cn.com.dhc.telereport.entity.RpNetBalanceRecordT" id="RpNetBalanceRecordTMap">
+		<result property="id" jdbcType="VARCHAR" column="id"/>
+		<result property="balanceMonth" jdbcType="DATE" column="balance_month"/>
+		<result property="recordOperator" jdbcType="VARCHAR" column="record_operator"/>
+		<result property="balanceFee" jdbcType="VARCHAR" column="balance_fee"/>
+		<result property="checkStatus" jdbcType="VARCHAR" column="check_status"/>
+		<result property="checkPerson" jdbcType="VARCHAR" column="check_person"/>
+		<result property="checkTime" jdbcType="DATE" column="check_time"/>
+		<collection property="rpCityCodeT" ofType="cn.com.dhc.telereport.entity.RpCityCodeT">
+			<result property="cityCode" jdbcType="VARCHAR" column="city_code"/>
+			<result property="cityName" jdbcType="VARCHAR" column="city_name"/>
+		</collection>
+		<collection property="rpProductCodeT" ofType="cn.com.dhc.telereport.entity.RpProductCodeT">
+			<result property="productCode" jdbcType="VARCHAR" column="product_code"/>
+			<result property="productName" jdbcType="VARCHAR" column="product_name"/>
+		</collection>
+		<collection property="rpBalanceSpCodeT" ofType="cn.com.dhc.telereport.entity.RpBalanceSpCodeT">
+			<result property="balanceSpCode" jdbcType="VARCHAR" column="balance_sp_code"/>
+			<result property="balanceSpName" jdbcType="VARCHAR" column="balance_sp_name"/>
+		</collection>
+		<collection property="rpBalanceTypeCodeT" ofType="cn.com.dhc.telereport.entity.RpBalanceTypeCodeT">
+			<result property="balanceTypeCode" jdbcType="VARCHAR" column="balance_type_code"/>
+			<result property="balanceTypeName" jdbcType="VARCHAR" column="balance_type_name"/>
+		</collection>
+	</resultMap>
+	<select id="selectByInfo" parameterType="cn.com.dhc.telereport.entity.RpNetBalanceRecordT"
+		 resultMap="RpNetBalanceRecordTMap"
+			>
+		SELECT id,balance_month,city_code,city_name,product_code,product_name,balance_sp_code,
+				balance_sp_name,balance_type_code,balance_type_name,record_operator,
+				balance_fee,check_status,check_person,check_time
+		FROM rp_net_balance_record_t natural join rp_city_code_t 
+			natural join rp_product_code_t natural join rp_balance_sp_code_t 
+			natural join rp_balance_type_code_t
+		<where>
+			<if test="balanceMonth != null ">
+				AND	DATE_FORMAT(balance_month,'%Y-%m')=DATE_FORMAT(#{balanceMonth},'%Y-%m')
+			</if>
+			<if test="cityCode != null and cityCode != '' ">
+				AND city_code = #{cityCode}
+			</if>
+			<if test="productCode != null and productCode != '' ">
+				AND product_code = #{productCode}
+			</if>
+			<if test="balanceSpCode != null and balanceSpCode != '' ">
+				AND balance_sp_code = #{balanceSpCode}
+			</if>
+			<if test="balanceTypeCode != null adn balanceTypeCode != ''">
+				AND balance_type_code = #{balanceTypeCode}
+			</if>
+		</where>
+	</select>
+</mapper>

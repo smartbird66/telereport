@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.dhc.telereport.mapper.RpPreFeeGatherTMapper">
+	<!-- select元素表示定义一个查询语句，
+			id属性值与接口中的方法名对应，
+			resultType属性值指定实体类的全限定名 -->
+	<resultMap type="cn.com.dhc.telereport.entity.RpPreFeeGatherT" id="RpPreFeeGatherTMap">
+		<result property="accountMonth" jdbcType="VARCHAR" column="account_month"/>
+		<result property="writeOffFee" jdbcType="DOUBLE" column="write_off_fee"/>
+		<result property="updateTime" jdbcType="DATE" column="update_time"/>
+		<collection property="rpCityCodeT" ofType="cn.com.dhc.telereport.entity.RpCityCodeT">
+			<result property="cityCode" jdbcType="VARCHAR" column="city_code"/>
+			<result property="cityName" jdbcType="VARCHAR" column="city_name"/>
+		</collection>
+		<collection property="rpProductCodeT" ofType="cn.com.dhc.telereport.entity.RpProductCodeT">
+			<result property="productCode" jdbcType="VARCHAR" column="product_code"/>
+			<result property="productName" jdbcType="VARCHAR" column="product_name"/>
+		</collection>
+		<collection property="rpWriteOffTypeCodeT" ofType="cn.com.dhc.telereport.entity.RpWriteOffTypeCodeT">
+			<result property="writeOffTypeCode" jdbcType="VARCHAR" column="write_off_type_code"/>
+			<result property="writeOffTypeName" jdbcType="VARCHAR" column="write_off_type_name"/>
+		</collection>
+	</resultMap>
+	<select id="selectByInfo" parameterType="cn.com.dhc.telereport.entity.RpPreFeeGatherT"
+	resultMap="RpPreFeeGatherTMap">
+		SELECT account_month, city_code,city_name, product_code,product_name,write_off_type_code,
+				write_off_type_name,write_off_fee,
+			update_time
+		FROM rp_pre_fee_gather_t natural join rp_city_code_t  natural join rp_product_code_t natural join rp_write_off_type_code_t
+		<where>
+			<if test="accountMonth != null and accountMonth != '' ">
+				AND account_month = #{accountMonth}
+			</if>
+			<if test="cityCode != null and cityCode != '' ">
+				AND city_code = #{cityCode}
+			</if>
+			<if test="productCode != null and productCode != '' ">
+				AND product_code = #{productCode}
+			</if>
+			<if test="writeOffTypeCode != null and writeOffTypeCode != '' ">
+				AND write_off_type_code = #{writeOffTypeCode}
+			</if>
+		</where>
+	</select>
+</mapper>

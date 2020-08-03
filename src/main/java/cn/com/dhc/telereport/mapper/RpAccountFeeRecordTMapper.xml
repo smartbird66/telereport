@@ -6,11 +6,34 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<!-- select元素表示定义一个查询语句，
 			id属性值与接口中的方法名对应，
 			resultType属性值指定实体类的全限定名 -->
+	<resultMap type="cn.com.dhc.telereport.entity.RpAccountFeeRecordT" id="RpAccountFeeRecordTMap">
+		<id property="id" jdbcType="VARCHAR" column="id"/>
+		<result property="accountRecordMonth" jdbcType="DATE" column="account_record_month"/>
+		<result property="accountFee" jdbcType="DOUBLE" column="account_fee"/>
+		<result property="accountOperator" jdbcType="VARCHAR" column="account_operator"/>
+		<result property="checkStatus" jdbcType="VARCHAR" column="check_status"/>
+		<result property="checkPerson" jdbcType="VARCHAR" column="check_person"/>
+		<result property="checkTime" jdbcType="DATE" column="check_time"/>
+		<collection property="rpCityCodeT" ofType="cn.com.dhc.telereport.entity.RpCityCodeT">
+			<result property="cityCode" jdbcType="VARCHAR" column="city_code"/>
+			<result property="cityName" jdbcType="VARCHAR" column="city_name"/>
+		</collection>
+		<collection property="rpProductCodeT" ofType="cn.com.dhc.telereport.entity.RpProductCodeT">
+			<result property="productCode" jdbcType="VARCHAR" column="product_code"/>
+			<result property="productName" jdbcType="VARCHAR" column="product_name"/>
+		</collection>
+		<collection property="rpAccountTypeCodeT" ofType="cn.com.dhc.telereport.entity.RpAccountTypeCodeT">
+			<result property="accountTypeCode" jdbcType="VARCHAR" column="account_type_code"/>
+			<result property="accountTypeName" jdbcType="VARCHAR" column="account_type_name"/>
+		</collection>
+	</resultMap>
 	<select id="selectByInfo" parameterType="cn.com.dhc.telereport.entity.RpAccountFeeRecordT" 
 	resultType="cn.com.dhc.telereport.entity.RpAccountFeeRecordT">
-		SELECT id,city_code,product_code,account_fee_type_code,account_record_month,account_fee,
+		SELECT id,city_code,city_name, product_code,product_name,account_fee_type_code,account_fee_type_name,
+				account_record_month,account_fee,
 				account_operator,check_status,check_person,check_time
-		FROM rp_account_fee_record_t
+		FROM rp_account_fee_record_t natural join rp_city_code_t 
+			natural join rp_product_code_t natural join rp_account_type_code_t
 		<where>
 			<!-- 对于字符串来说既要判断null，也要判断空字符串 -->
 			<!-- 在test属性中和＃{}中使用的是实体类（参数）中的数据域，不在这里的指的是表中的列名。 -->
