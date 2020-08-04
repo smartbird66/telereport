@@ -51,11 +51,10 @@
                                         <div class="col-sm-4">
                                             <select class="form-control" name="productCode" id="productCode">
                                                 <option value="">全部</option>
-                                                <option>1</option>
-                                                <option>2</option>
-                                                <option>3</option>
-                                                <option>4</option>
-                                                <option>5</option>
+                                                <%@taglib  uri="http://java.sun.com/jsp/jstl/core" prefix="product" %>
+                                                <product:forEach items="${productList}" var="product" >
+                                                    <option value="${productCode}">${product.productName}</option>
+                                                </product:forEach>
                                             </select>
                                         </div>
                                         <label for="inputPassword3" class="col-sm-2 control-label">稽核状态</label>
@@ -73,33 +72,20 @@
                                         <div class="col-sm-4">
                                             <input type="text" class="form-control" placeholder="请输入出账编号">
                                         </div>
-                                        <label for="inputPassword3" class="col-sm-2 control-label">录入人员</label>
-                                        <div class="col-sm-4">
-                                            <input type="text" class="form-control" placeholder="请输入录入人员">
-                                        </div>
-                                        <label for="inputPassword3" class="col-sm-2 control-label">金额</label>
-                                        <div class="col-sm-4">
-                                            <input type="text" class="form-control" placeholder="请输入金额">
-                                        </div>
                                         <label for="inputPassword3" class="col-sm-2 control-label">出账收入类型</label>
                                         <div class="col-sm-4">
                                             <select class="form-control">
                                                 <option value="">全部</option>
-                                                <option>1</option>
-                                                <option>2</option>
-                                                <option>3</option>
-                                                <option>4</option>
-                                                <option>5</option>
+                                                <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="b" %>
+                                                <b:forEach items="${rpAccountTypeCodeTList}" var="rpAccountTypeCodeTList">
+                                                    <option value="${rpAccountTypeCodeTList.accountTypeCode }">${rpAccountTypeCodeTList.accountTypeName}</option>
+                                                </b:forEach>
                                             </select>
                                         </div>
                                     </div>
                                     <div class="form-group">
                                         <div class="col-sm-offset-2 col-sm-10">
                                             <button type="submit" class="btn btn-default">查询</button>
-                                            <a href="#" class="btn btn-default" role="button">稽核通过</a>
-                                            <a href="#" class="btn btn-default" role="button">稽核失败</a>
-                                            <a href="#" class="btn btn-default" role="button">未稽核</a>
-                                            <a href="#" class="btn btn-default" role="button">导出</a>
                                         </div>
                                     </div>
                                 </form>
@@ -128,27 +114,50 @@
                                         <th>稽核状态</th>
                                         <th colspan="4">操作</th>
                                     </tr>
-                                    <c:forEach items="${accountFeeRecordList}" var="accountFeeRecord">
+                                    <%@ taglib prefix="b" uri="http://java.sun.com/jsp/jstl/core" %>
+                                    <b:forEach items="${accountFeeRecordList}" var="accountFeeRecord">
                                         <tr>
                                             <td><input type="checkbox"/></td>
                                             <td>${accountFeeRecord.id}</td>
                                             <td>${accountFeeRecord.accountRecordMonth}</td>
                                             <td>
-                                                <c:forEach items="${cityList}" var="city">
-                                                    <c:if test="${accountFeeRecord.cityCode==city.cityCode}">
+                                                <b:forEach items="${cityList}" var="city">
+                                                    <b:if test="${accountFeeRecord.cityCode==city.cityCode}">
                                                         ${city.cityName}
-                                                    </c:if>
-                                                </c:forEach>
+                                                    </b:if>
+                                                </b:forEach>
                                             </td>
-                                            <td>${accountFeeRecord.productCode}</td>
-                                            <td>${accountFeeRecord.accountFeeTypeCode}</td>
+                                            <td>
+                                                <b:forEach items="${productList}" var="product">
+                                                    <b:if test="${accountFeeRecord.productCode==product.productCode}">
+                                                        ${product.productName}
+                                                    </b:if>
+                                                </b:forEach>
+                                            </td>
+                                            <td>
+                                                <b:forEach items="${rpAccountTypeCodeTList}" var="rpAccountTypeCode">
+                                                    <b:if test="${accountFeeRecord.accountFeeTypeCode==rpAccountTypeCode.accountTypeCode}">
+                                                        ${rpAccountTypeCode.accountTypeName}
+                                                    </b:if>
+                                                </b:forEach>
+                                            </td>
                                             <td>${accountFeeRecord.accountFee}</td>
                                             <td>${accountFeeRecord.accountOperator}</td>
-                                            <td>未稽核|稽核成功|稽核失败</td>
-                                            <td colspan="2"><a href="${pageContext.request.contextPath}/shourujicha/${accountFeeRecord.id}/update?form">稽核成功</a></td>
-                                            <td colspan="2"><a href="${pageContext.request.contextPath}/shourujicha/${accountFeeRecord.id}/delete">稽核失败</a></td>
+                                            <td>
+                                                <b:if test="${accountFeeRecord.checkStatus==0}">
+                                                    未稽核
+                                                </b:if>
+                                                <b:if test="${accountFeeRecord.checkStatus==1}">
+                                                    稽核成功
+                                                </b:if>
+                                                <b:if test="${accountFeeRecord.checkStatus==2}">
+                                                    稽核失败
+                                                </b:if>
+                                            </td>
+                                            <td colspan="2"><a href="${pageContext.request.contextPath}/shourujihe/account/update?Aid=${accountFeeRecord.id}&Cid=1">稽核成功</a></td>
+                                            <td colspan="2"><a href="${pageContext.request.contextPath}/shourujihe/account/update?Aid=${accountFeeRecord.id}&Cid=2">稽核失败</a></td>
                                         </tr>
-                                    </c:forEach>
+                                    </b:forEach>
                                 </table>
 
                                 <!--分页开始-->

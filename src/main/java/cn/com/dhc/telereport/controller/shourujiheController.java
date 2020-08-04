@@ -41,8 +41,9 @@ public class shourujiheController {
     private RpBusinessFeeGatherTService rpBusinessFeeGatherTService;
     @Autowired  // 通知单收入编码
     private RpBusinessFeeTypeCodeTService rpBusinessFeeTypeCodeTService;
-
-    // 出账归集
+    @Autowired //出账收入稽核状态变更
+    private RpAccountFeeRecordCheckService rpAccountFeeRecordCheckService;
+    // 出账稽核
     @RequestMapping(value="/account")
     public String accountOutMonth(Model model) {
         // 调用Service层的城市编码
@@ -73,6 +74,41 @@ public class shourujiheController {
         // 调用service层的post查询出账归集功能
         List<RpAccountFeeRecordT> accountFeeRecordList = rpAccountFeeRecordTService.selectByInfo(rpAccountFeeRecordForm);
         model.addAttribute("accountFeeRecordList", accountFeeRecordList);
+
+        return "shourujihe/account";
+    }
+
+    //出账收入稽核状态变更
+    @RequestMapping(value = "/account/{Aid}/{Cid}/update")
+    public String accountCheckChange(@PathVariable("Aid") String Aid,@PathVariable("Cid") String Cid, Model model){
+        // 调用Service层的城市编码
+        List<RpCityCodeT> list = rpCityCodeTService.selectAllCity();
+        model.addAttribute("cityList", list); //属性名随便起
+        // 调用Service层的产品编码
+        List<RpProductCodeT> rpProductCodeTList = rpProductCodeTService.selectAllProduct();
+        model.addAttribute("productList", rpProductCodeTList);
+        // 调用Service层的出账类型编码
+        List<RpAccountTypeCodeT> rpAccountTypeCodeTList = rpAccountTypeCodeTService.selectAllRpAccountTypeCodeT();
+        model.addAttribute("rpAccountTypeCodeTList", rpAccountTypeCodeTList);
+        // 调用Service层的更新稽核状态
+        rpAccountFeeRecordCheckService.updateStatus(Aid,Cid);
+        return "/account";
+    }
+
+    //出账收入稽核状态变更
+    @RequestMapping(value = "/account/update",params = {"Aid","Cid"})
+    public String accountCheckChange2(String Aid,String Cid, Model model){
+        // 调用Service层的城市编码
+        List<RpCityCodeT> list = rpCityCodeTService.selectAllCity();
+        model.addAttribute("cityList", list); //属性名随便起
+        // 调用Service层的产品编码
+        List<RpProductCodeT> rpProductCodeTList = rpProductCodeTService.selectAllProduct();
+        model.addAttribute("productList", rpProductCodeTList);
+        // 调用Service层的出账类型编码
+        List<RpAccountTypeCodeT> rpAccountTypeCodeTList = rpAccountTypeCodeTService.selectAllRpAccountTypeCodeT();
+        model.addAttribute("rpAccountTypeCodeTList", rpAccountTypeCodeTList);
+        // 调用Service层的更新稽核状态
+        rpAccountFeeRecordCheckService.updateStatus(Aid,Cid);
         return "shourujihe/account";
     }
 
