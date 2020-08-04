@@ -57,7 +57,17 @@
 		    <groupId>org.apache.taglibs</groupId>
 		    <artifactId>taglibs-standard-impl</artifactId>
 		    <version>1.2.5</version>
-		</dependency> 
+		</dependency>
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>jstl</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.tomcat.embed</groupId>
+            <artifactId>tomcat-embed-jasper</artifactId>
+            <scope>provided</scope>
+        </dependency>
     </dependencies>
 
     <dependencyManagement>
@@ -88,6 +98,14 @@
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
         </plugins>
+        <resources>
+            <resource>
+                <directory>src/main/java</directory>
+                <includes>
+                    <include>**/*.xml</include>
+                </includes>
+            </resource>
+        </resources>
     </build>
 
 </project>
