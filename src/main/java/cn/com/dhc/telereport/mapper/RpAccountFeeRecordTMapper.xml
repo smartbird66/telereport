@@ -29,7 +29,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</resultMap>
 	<select id="selectByInfo" parameterType="cn.com.dhc.telereport.entity.RpAccountFeeRecordT" 
 	resultType="cn.com.dhc.telereport.entity.RpAccountFeeRecordT">
-		SELECT id,city_code,city_name, product_code,product_name,account_fee_type_code,account_fee_type_name,
+		SELECT id,city_code,city_name, product_code,product_name,account_fee_type_code,account_type_name,
 				account_record_month,account_fee,
 				account_operator,check_status,check_person,check_time
 		FROM rp_account_fee_record_t natural join rp_city_code_t 
