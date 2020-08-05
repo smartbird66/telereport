@@ -40,6 +40,8 @@ public class shourujiheController {
     private RpAccountFeeRecordCheckSService rpAccountFeeRecordCheckSService;
     @Autowired // 卡销售归集查询
     private RpCardSaleRecordTService rpCardSaleRecordTService;
+    @Autowired //卡销售稽核查询
+    private  RpCardCheckSService rpCardCheckSService;
     @Autowired  // 预转存归集查询
     private RpPreFeeGatherTService rpPreFeeGatherTService;
     @Autowired // 网间结算归集查询
@@ -50,6 +52,8 @@ public class shourujiheController {
     private RpBusinessFeeTypeCodeTService rpBusinessFeeTypeCodeTService;
     @Autowired //出账收入稽核状态变更
     private RpAccountFeeRecordCheckService rpAccountFeeRecordCheckService;
+    @Autowired //卡销售收入稽核状态变更
+    private RpCardCheckService rpCardCheckService;
     // 出账稽核
     @RequestMapping(value="/account")
     public String accountOutMonth(Model model) {
@@ -92,6 +96,7 @@ public class shourujiheController {
         return "shourujihe/account";
     }
 
+
     //出账收入稽核状态变更
     @RequestMapping(value = "/account/update",params = {"Aid","Cid"})
     public String accountCheckChange2(String Aid,String Cid, Model model){
@@ -121,9 +126,12 @@ public class shourujiheController {
         return "shourujihe/cardTo";
     }
 
-    // 卡销售归集查询
+    // 卡销售收入归集查询
     @RequestMapping(value="/cardTo", method=RequestMethod.POST)
-    public String cardTo2(RpCardSaleRecordTForm rpCardSaleRecordTForm, Model model) {
+    public String cardTo2(@RequestParam(value = "page",defaultValue = "1") int page,RpCardCheckForm rpCardSaleRecordTForm, Model model) {
+        RpCardCheckForm rpAccountFeeCheckReturn=new RpCardCheckForm();
+        BeanUtils.copyProperties(rpCardSaleRecordTForm,rpAccountFeeCheckReturn);
+        model.addAttribute("rpCardSaleRecordTForm",rpAccountFeeCheckReturn);
         System.out.println(rpCardSaleRecordTForm);
         // 调用service层的城市编码
         List<RpCityCodeT> list = rpCityCodeTService.selectAllCity();
@@ -132,8 +140,25 @@ public class shourujiheController {
         List<RpProductCodeT> rpProductCodeTList = rpProductCodeTService.selectAllProduct();
         model.addAttribute("productList", rpProductCodeTList);
         // 调用service层的卡销售归集查询
-        List<RpCardSaleRecordT> RpCardSaleRecordTList = rpCardSaleRecordTService.selectByInfo(rpCardSaleRecordTForm);
+        PageHelper.startPage(page,5);
+        List<RpCardSaleRecordT> RpCardSaleRecordTList = rpCardCheckSService.selectByInfo(rpCardSaleRecordTForm);
         model.addAttribute("RpCardSaleRecordTList", RpCardSaleRecordTList);
+        PageInfo pages=new PageInfo(RpCardSaleRecordTList,20);
+        model.addAttribute("PageInfo", pages);
+        return "shourujihe/cardTo";
+    }
+
+    //卡销售收入稽核状态变更
+    @RequestMapping(value = "/cardTo/update",params = {"Aid","Cid"})
+    public String cardToCheckChange2(String Aid,String Cid, Model model){
+        // 调用Service层的城市编码
+        List<RpCityCodeT> list = rpCityCodeTService.selectAllCity();
+        model.addAttribute("cityList", list); //属性名随便起
+        // 调用Service层的产品编码
+        List<RpProductCodeT> rpProductCodeTList = rpProductCodeTService.selectAllProduct();
+        model.addAttribute("productList", rpProductCodeTList);
+        // 调用Service层的更新稽核状态
+        rpCardCheckService.updateStatus(Aid,Cid);
         return "shourujihe/cardTo";
     }
 

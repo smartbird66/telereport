@@ -2,7 +2,7 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="cn.com.dhc.telereport.mapper.RpAccountFeeRecordCheckSMapper">
+<mapper namespace="cn.com.dhc.telereport.mapper.RpCardCheckSMapper">
     <!-- select元素表示定义一个查询语句，
             id属性值与接口中的方法名对应，
             resultType属性值指定实体类的全限定名 -->
@@ -27,12 +27,12 @@
             <result property="accountTypeName" jdbcType="VARCHAR" column="account_type_name"/>
         </collection>
     </resultMap>
-    <select id="selectByInfo" parameterType="cn.com.dhc.telereport.entity.RpAccountFeeRecordT"
-            resultType="cn.com.dhc.telereport.entity.RpAccountFeeRecordT">
-        SELECT id,city_code, product_code,account_fee_type_code,
-        account_record_month,account_fee,
-        account_operator,check_status,check_person,check_time
-        FROM rp_account_fee_record_t
+    <select id="selectByInfo" parameterType="cn.com.dhc.telereport.entity.RpCardSaleRecordT"
+            resultType="cn.com.dhc.telereport.entity.RpCardSaleRecordT">
+        SELECT id,city_code,product_code,sale_date,discount_rate,
+        card_sale_amount,card_par_value_fee,record_operator,check_status,
+        check_person,check_time,total_fee,discount_fee
+        FROM rp_card_sale_record_t
         <where>
             <!-- 对于字符串来说既要判断null，也要判断空字符串 -->
             <!-- 在test属性中和＃{}中使用的是实体类（参数）中的数据域，不在这里的指的是表中的列名。 -->
@@ -42,11 +42,14 @@
             <if test="productCode != null and productCode != ''">
                 AND product_code LIKE #{productCode}
             </if>
-            <if test="accountFeeTypeCode != null and accountFeeTypeCode != '' ">
-                AND account_fee_type_code=#{accountFeeTypeCode}
+            <if test="totalFee != null and totalFee != '' ">
+                AND total_fee=#{totalFee}
             </if>
             <if test="checkStatus != null and checkStatus != ''">
                 AND check_status=#{checkStatus}
+            </if>
+            <if test="cardSaleAmount != null and cardSaleAmount != '' ">
+                AND card_sale_amount=#{cardSaleAmount}
             </if>
         </where>
     </select>

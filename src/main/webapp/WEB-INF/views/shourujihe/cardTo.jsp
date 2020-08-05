@@ -24,30 +24,44 @@
                             <h3 class="panel-title">销售查询处理</h3>
                         </div>
                         <div class="panel-body">
-                            <form class="form-horizontal">
+                            <form class="form-horizontal" action="${pageContext.request.contextPath}/shourujihe/cardTo" method="post" id="formId" name="formId">
                                 <div class="form-group">
-                                    <label for="inputPassword3" class="col-sm-2 control-label">从</label>
-                                    <div class="col-sm-2">
-                                        <input type="month" class="form-control" id="" placeholder="Text input" />
-                                    </div>
-                                    <label for="inputPassword3" class="col-sm-1 control-label">到</label>
-                                    <div class="col-sm-2">
-                                        <input type="month" class="form-control" id="" placeholder="Text input" />
-                                    </div>
-                                    <label for="inputEmail3" class="col-sm-1 control-label">城市编码</label>
+                                    <label for="inputEmail3" class="col-sm-2 control-label">城市编码</label>
                                     <div class="col-sm-4">
-                                        <select class="form-control">
-                                            <option value="">全部</option>
+                                        <select class="form-control" name="cityCode" id="cityCode">
+                                            <%@taglib  uri="http://java.sun.com/jsp/jstl/core" prefix="b" %>
+                                            <b:if test="${not empty rpCardSaleRecordTForm.cityCode}">
+                                                <b:forEach items="${cityList}" var="cityList">
+                                                    <b:if test="${rpCardSaleRecordTForm.cityCode==cityList.cityCode}">
+                                                        <option value="${rpCardSaleRecordTForm.cityCode}">${cityList.cityName}</option>
+                                                    </b:if>
+                                                </b:forEach>
+                                            </b:if>
+                                            <%@taglib  uri="http://java.sun.com/jsp/jstl/core" prefix="b" %>
+                                            <b:if test="${empty rpCardSaleRecordTForm.cityCode}">
+                                                <option value="">全部</option>
+                                            </b:if>
                                             <%@taglib  uri="http://java.sun.com/jsp/jstl/core" prefix="city" %>
                                             <city:forEach items="${cityList}" var="city" >
-                                                <option value="${city.cityCode}">${city.cityName}</option>
+                                                <option value="${city.cityCode }">${city.cityName}</option>
                                             </city:forEach>
                                         </select>
                                     </div>
                                     <label for="inputPassword3" class="col-sm-2 control-label">产品编码</label>
                                     <div class="col-sm-4">
-                                        <select class="form-control">
-                                            <option value="">全部</option>
+                                        <select class="form-control" name="productCode" id="productCode">
+                                            <%@taglib  uri="http://java.sun.com/jsp/jstl/core" prefix="b" %>
+                                            <b:if test="${not empty rpCardSaleRecordTForm.productCode}">
+                                                <b:forEach items="${productList}" var="productList">
+                                                    <b:if test="${rpCardSaleRecordTForm.productCode==productList.productCode}">
+                                                        <option value="${rpCardSaleRecordTForm.productCode}">${productList.productName}</option>
+                                                    </b:if>
+                                                </b:forEach>
+                                            </b:if>
+                                            <%@taglib  uri="http://java.sun.com/jsp/jstl/core" prefix="b" %>
+                                            <b:if test="${empty rpCardSaleRecordTForm.productCode}">
+                                                <option value="">全部</option>
+                                            </b:if>
                                             <%@taglib  uri="http://java.sun.com/jsp/jstl/core" prefix="product" %>
                                             <product:forEach items="${productList}" var="product" >
                                                 <option value="${product.productCode}">${product.productName}</option>
@@ -56,13 +70,29 @@
                                     </div>
                                     <label for="inputPassword3" class="col-sm-2 control-label">稽核状态</label>
                                     <div class="col-sm-4">
-                                        <select class="form-control">
+                                        <select class="form-control" name="checkStatus" id="checkStatus">
+                                            <%@taglib  uri="http://java.sun.com/jsp/jstl/core" prefix="b" %>
+                                            <b:if test="${not empty rpCardSaleRecordTForm.checkStatus}">
+                                                <b:if test="${rpCardSaleRecordTForm.checkStatus==0}">
+                                                    <option value="0">未稽核</option>
+                                                </b:if>
+
+                                                <b:if test="${rpCardSaleRecordTForm.checkStatus==1}">
+                                                    <option value="1">稽核成功</option>
+                                                </b:if>
+
+                                                <b:if test="${rpCardSaleRecordTForm.checkStatus==2}">
+                                                    <option value="2">稽核失败</option>
+                                                </b:if>
+                                            </b:if>
+                                            <%@taglib  uri="http://java.sun.com/jsp/jstl/core" prefix="b" %>
+                                            <b:if test="${empty rpCardSaleRecordTForm.checkStatus}">
+                                                <option value="">全部</option>
+                                            </b:if>
                                             <option value="">全部</option>
-                                            <option>1</option>
-                                            <option>2</option>
-                                            <option>3</option>
-                                            <option>4</option>
-                                            <option>5</option>
+                                            <option value="0">未稽核</option>
+                                            <option value="1">稽核成功</option>
+                                            <option value="2">稽核失败</option>
                                         </select>
                                     </div>
                                     <label for="inputPassword3" class="col-sm-2 control-label">卡销售数量</label>
@@ -77,10 +107,6 @@
                                 <div class="form-group">
                                     <div class="col-sm-offset-2 col-sm-10">
                                         <button type="submit" class="btn btn-default">查询</button>
-                                        <a href="#" class="btn btn-default" role="button">稽核通过</a>
-                                        <a href="#" class="btn btn-default" role="button">稽核失败</a>
-                                        <a href="#" class="btn btn-default" role="button">未稽核</a>
-                                        <a href="#" class="btn btn-default" role="button">导出</a>
                                     </div>
                                 </div>
                             </form>
@@ -104,28 +130,49 @@
                                     <th>折扣率</th>
                                     <th>卡销售数量</th>
                                     <th>面值金额</th>
-                                    <th>录入人员</th>
-                                    <th>稽核人</th>
+                                    <th>稽核状态</th>
                                     <th>卡总金额</th>
                                     <th>折后金额</th>
                                     <th colspan="2">操作</th>
                                 </tr>
-                                <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-                                <b:forEach items="${RpCardSaleRecordTList}" var="RpCardSaleRecordTList">
+                                <%@ taglib prefix="b" uri="http://java.sun.com/jsp/jstl/core" %>
+                                <b:forEach items="${PageInfo.list}" var="accountFeeRecord">
                                     <tr>
-                                        <td><input type="checkbox"></td>
-                                        <td>${RpCardSaleRecordTList.id}</td>
-                                        <td>${RpCardSaleRecordTList.rpCityCodeT.cityName}</td>
-                                        <td>${RpCardSaleRecordTList.rpProductCodeT.productName}</td>
-                                        <td>${RpCardSaleRecordTList.discountRate}</td>
-                                        <td>${RpCardSaleRecordTList.cardSaleAmount}</td>
-                                        <td>${RpCardSaleRecordTList.cardParValueFee}</td>
-                                        <td>${RpCardSaleRecordTList.recordOperator}</td>
-                                        <td>${RpCardSaleRecordTList.checkPerson}</td>
-                                        <td>${RpCardSaleRecordTList.totalFee}</td>
-                                        <td>${RpCardSaleRecordTList.discountFee}</td>
-                                        <td><a href="#">编辑</a></td>
-                                        <td><a href="#">删除</a></td>
+                                        <td><input type="checkbox"/></td>
+                                        <td>${accountFeeRecord.id}</td>
+                                        <td>
+                                            <b:forEach items="${cityList}" var="city">
+                                                <b:if test="${accountFeeRecord.cityCode==city.cityCode}">
+                                                    ${city.cityName}
+                                                </b:if>
+                                            </b:forEach>
+                                        </td>
+                                        <td>
+                                            <b:forEach items="${productList}" var="product">
+                                                <b:if test="${accountFeeRecord.productCode==product.productCode}">
+                                                    ${product.productName}
+                                                </b:if>
+                                            </b:forEach>
+                                        </td>
+                                        <td>${accountFeeRecord.discountRate}</td>
+                                        <td>${accountFeeRecord.cardSaleAmount}</td>
+                                        <td>${accountFeeRecord.cardParValueFee}</td>
+                                        <td>
+                                            <b:if test="${accountFeeRecord.checkStatus==0}">
+                                                未稽核
+                                            </b:if>
+                                            <b:if test="${accountFeeRecord.checkStatus==1}">
+                                                稽核成功
+                                            </b:if>
+                                            <b:if test="${accountFeeRecord.checkStatus==2}">
+                                                稽核失败
+                                            </b:if>
+                                        </td>
+                                        <td>${accountFeeRecord.totalFee}</td>
+                                        <td>${accountFeeRecord.discountFee}</td>
+                                            <%--                                            <td colspan="2"><a href="${pageContext.request.contextPath}/shourujihe/account/update?Aid=${accountFeeRecord.id}&Cid=1">稽核成功</a></td>--%>
+                                        <td colspan="2"><a onclick="success(${accountFeeRecord.id})">稽核成功</a></td>
+                                        <td colspan="2"><a href="${pageContext.request.contextPath}/shourujihe/account/update?Aid=${accountFeeRecord.id}&Cid=2">稽核失败</a></td>
                                     </tr>
                                 </b:forEach>
                             </table>
