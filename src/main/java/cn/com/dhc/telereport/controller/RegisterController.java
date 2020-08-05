@@ -43,9 +43,9 @@ public class RegisterController {
 
                 return "account";
             }
-            if(c=='a'){
+            if(c=='b'){
 
-                return "account";
+                return "shourujihe/account";
             }if(c=='a'){
 
                 return "account";

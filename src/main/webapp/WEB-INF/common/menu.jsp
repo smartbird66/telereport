@@ -22,7 +22,7 @@
   <div class="panel panel-default">
     <div class="panel-heading" role="tab" id="headingTwo">
       <h4 class="panel-title">
-        <a   class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+        <a   class="collapsed" onclick="displayDate1()" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
          	 数据归集模块
         </a>
       </h4>
@@ -40,15 +40,19 @@
   <div class="panel panel-default">
     <div class="panel-heading" role="tab" id="headingThree">
       <h4 class="panel-title">
-        <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-          	标题菜单栏 #3
+        <a class="collapsed" onclick="displayDate2()" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+          	收入稽核模块
         </a>
       </h4>
     </div>
     <div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
-      <div class="panel-body">
-				随便添点东西
-      </div>
+        <div class="list-group">
+            <a href="${pageContext.request.contextPath}/shourujihe/account" class="list-group-item">出账收入稽核</a>
+            <a href="${pageContext.request.contextPath}/shourujihe/cardTo" class="list-group-item">卡销售收入稽核</a>
+            <a href="${pageContext.request.contextPath}/shourujihe/stored" class="list-group-item">预存转收入稽核</a>
+            <a href="${pageContext.request.contextPath}/shourujihe/internet" class="list-group-item">网间收入稽核</a>
+            <a href="${pageContext.request.contextPath}/shourujihe/messageBill" class="list-group-item">通知单稽核</a>
+        </div>
     </div>
   </div>
 </div>
