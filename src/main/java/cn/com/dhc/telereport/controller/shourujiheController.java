@@ -3,12 +3,17 @@ package cn.com.dhc.telereport.controller;
 import cn.com.dhc.telereport.entity.*;
 import cn.com.dhc.telereport.form.*;
 import cn.com.dhc.telereport.service.*;
+import com.fasterxml.jackson.databind.util.BeanUtil;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
@@ -31,6 +36,8 @@ public class shourujiheController {
     private RpBalanceSpCodeTService rpBalanceSpCodeTService;
     @Autowired  // 出账汇总表查询
     private RpAccountGatherTService rpAccountGatherTService;
+    @Autowired //出账稽核查询
+    private RpAccountFeeRecordCheckSService rpAccountFeeRecordCheckSService;
     @Autowired // 卡销售归集查询
     private RpCardSaleRecordTService rpCardSaleRecordTService;
     @Autowired  // 预转存归集查询
@@ -61,7 +68,12 @@ public class shourujiheController {
 
     // 出账收入稽核查询
     @RequestMapping(value="/account", method=RequestMethod.POST)
-    public String accountOutMonth2(RpAccountFeeRecordTForm rpAccountFeeRecordForm, Model model) {
+    public String accountOutMonth2(@RequestParam(value = "page",defaultValue = "1") int page, RpAccountFeeCheckForm rpAccountFeeRecordForm, Model model) {
+        //重新加载查询条件
+        RpAccountFeeCheckForm rpAccountFeeCheckReturn=new RpAccountFeeCheckForm();
+        BeanUtils.copyProperties(rpAccountFeeRecordForm,rpAccountFeeCheckReturn);
+        model.addAttribute("rpAccountFeeRecordForm",rpAccountFeeCheckReturn);
+        System.out.println(rpAccountFeeRecordForm);
         // 调用Service层的城市编码
         List<RpCityCodeT> list = rpCityCodeTService.selectAllCity();
         model.addAttribute("cityList", list); //属性名随便起
@@ -71,12 +83,15 @@ public class shourujiheController {
         // 调用Service层的出账类型编码
         List<RpAccountTypeCodeT> rpAccountTypeCodeTList = rpAccountTypeCodeTService.selectAllRpAccountTypeCodeT();
         model.addAttribute("rpAccountTypeCodeTList", rpAccountTypeCodeTList);
+        PageHelper.startPage(page,5);
         // 调用service层的post查询出账归集功能
-        List<RpAccountFeeRecordT> accountFeeRecordList = rpAccountFeeRecordTService.selectByInfo(rpAccountFeeRecordForm);
-        model.addAttribute("accountFeeRecordList", accountFeeRecordList);
+        List<RpAccountFeeRecordT> accountFeeRecordList = rpAccountFeeRecordCheckSService.selectByInfo(rpAccountFeeRecordForm);
+        PageInfo pages=new PageInfo(accountFeeRecordList,20);
+        model.addAttribute("PageInfo", pages);
 
         return "shourujihe/account";
     }
+
 
     //出账收入稽核状态变更
     @RequestMapping(value = "/account/{Aid}/{Cid}/update")
@@ -94,6 +109,7 @@ public class shourujiheController {
         rpAccountFeeRecordCheckService.updateStatus(Aid,Cid);
         return "account";
     }
+
 
     //出账收入稽核状态变更
     @RequestMapping(value = "/account/update",params = {"Aid","Cid"})
