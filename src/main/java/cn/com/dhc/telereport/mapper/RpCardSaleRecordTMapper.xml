@@ -37,7 +37,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		<where>
 			<if test="cityCode != null and cityCode != '' ">
 				AND city_code = #{cityCode}
-
 			</if>
 			<if test="productCode != null and productCode != '' ">
 				AND product_code = #{productCode}
