@@ -92,7 +92,7 @@ public class shourujiheController {
         model.addAttribute("rpAccountTypeCodeTList", rpAccountTypeCodeTList);
         // 调用Service层的更新稽核状态
         rpAccountFeeRecordCheckService.updateStatus(Aid,Cid);
-        return "/account";
+        return "account";
     }
 
     //出账收入稽核状态变更
