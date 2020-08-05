@@ -121,7 +121,7 @@
 								<td><a href="#">编辑</a></td>
 								<td><a href="#">删除</a></td>
 							</tr>
-							</b:forEach>
+						  </b:forEach>
 							<tr>
 								<td><input type="checkbox"></td>
 								<td>2</td>

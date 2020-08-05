@@ -40,7 +40,7 @@
                                             <option value="">全部</option>
                                             <%@taglib  uri="http://java.sun.com/jsp/jstl/core" prefix="city" %>
                                             <city:forEach items="${cityList}" var="city" >
-                                                <option value="${cityCode}">${city.cityName}</option>
+                                                <option value="${city.cityCode}">${city.cityName}</option>
                                             </city:forEach>
                                         </select>
                                     </div>
@@ -50,7 +50,7 @@
                                             <option value="">全部</option>
                                             <%@taglib  uri="http://java.sun.com/jsp/jstl/core" prefix="product" %>
                                             <product:forEach items="${productList}" var="product" >
-                                                <option value="${productCode}">${product.productName}</option>
+                                                <option value="${product.productCode}">${product.productName}</option>
                                             </product:forEach>
                                         </select>
                                     </div>
@@ -104,34 +104,26 @@
 
                             <table class="table table-bordered table-hover table-striped">
                                 <tr>
-                                    <th><input type="checkbox"/></th>
-                                    <th>序号</th>
-                                    <th>预转存录入日期</th>
-                                    <th>城市编号</th>
-                                    <th>产品编号</th>
-                                    <th>销账类型编码</th>
-                                    <th>销账金额</th>
-                                    <th>录入人员</th>
-                                    <th>稽核状态</th>
-                                    <th>稽核人</th>
-                                    <th>稽核时间</th>
-                                    <th colspan="4">操作</th>
+                                    <th><input type="checkbox"></th>
+                                    <th>出账月份</th>
+                                    <th>城市</th>
+                                    <th>产品</th>
+                                    <th>出账类型</th>
+                                    <th>录入金额</th>
+                                    <th colspan="2">操作</th>
                                 </tr>
-                                <tr>
-                                    <td><input type="checkbox"/></td>
-                                    <td>1</td>
-                                    <td>2020/07/27</td>
-                                    <td>大连</td>
-                                    <td>手机</td>
-                                    <td>001</td>
-                                    <td>100</td>
-                                    <td>张三</td>
-                                    <td>未稽核</td>
-                                    <td>无</td>
-                                    <td>无</td>
-                                    <td colspan="2">编辑</td>
-                                    <td colspan="2">删除</td>
-                                </tr>
+                                <b:forEach items="${rpBalanceTypeCodeTList}" var="rpBalanceTypeCodeTList">
+                                    <tr>
+                                        <td><input type="checkbox"></td>
+                                        <td>${rpBalanceTypeCodeTList.accountMonth}</td>
+                                        <td>${rpBalanceTypeCodeTList.rpCityCodeT.cityName}</td>
+                                        <td>${rpBalanceTypeCodeTList.rpProductCodeT.productName}</td>
+                                        <td>${rpBalanceTypeCodeTList.rpWriteOffTypeCodeT.writeOffTypeName}</td>
+                                        <td>${rpBalanceTypeCodeTList.writeOffFee}</td>
+                                        <td><a href="#">编辑</a></td>
+                                        <td><a href="#">删除</a></td>
+                                    </tr>
+                                </b:forEach>
                             </table>
 
                             <!--分页开始-->
