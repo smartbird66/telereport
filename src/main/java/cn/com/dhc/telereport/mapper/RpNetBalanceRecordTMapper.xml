@@ -32,8 +32,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		</collection>
 	</resultMap>
 	<select id="selectByInfo" parameterType="cn.com.dhc.telereport.entity.RpNetBalanceRecordT"
-		 resultMap="RpNetBalanceRecordTMap"
-			>
+		 resultMap="RpNetBalanceRecordTMap">
 		SELECT id,balance_month,city_code,city_name,product_code,product_name,balance_sp_code,
 				balance_sp_name,balance_type_code,balance_type_name,record_operator,
 				balance_fee,check_status,check_person,check_time
@@ -53,7 +52,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			<if test="balanceSpCode != null and balanceSpCode != '' ">
 				AND balance_sp_code = #{balanceSpCode}
 			</if>
-			<if test="balanceTypeCode != null adn balanceTypeCode != ''">
+			<if test="balanceTypeCode != null and balanceTypeCode != ''">
 				AND balance_type_code = #{balanceTypeCode}
 			</if>
 		</where>

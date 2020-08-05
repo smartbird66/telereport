@@ -32,16 +32,26 @@
 						<div id="myTabContent" class="tab-content">
 						    <div class="tab-pane fade in active" id="internetMonth">
 						    	<br><br>
-					        <form class="form-horizontal">
+					        <form name="demo" class="form-horizontal" action="${pageContext.request.contextPath}/imputation/internet" method="post">
 							  <div class="form-group">
 							    <label for="inputPassword3" class="col-sm-2 control-label">选择日期</label>
 							    <div class="col-sm-4">
-							      <input id="balanceMonth" name="balanceMonth" type="month" class="form-control">
+						        	<input name="balanceMonth" id="balanceMonth" type="date" class="form-control">
 							    </div>
 							    <label for="inputPassword3" class="col-sm-2 control-label">城市</label>
 							    <div id="cityCode" name="cityCode" class="col-sm-4">
 							      <select class="form-control">
-							      	<option value="">请选择</option>
+							      <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="b" %>
+							      	<b:if test="${not empty rpNetBalanceRecordTForm.cityCode}">
+								    	<b:forEach items="${cityList}" var="cityList">
+                                           <b:if test="${rpNetBalanceRecordTForm.cityCode==cityList.cityCode}">
+                                               <option value="${ rpNetBalanceRecordTForm.cityCode  }">${cityList.cityName}</option>
+                                           </b:if>
+                                       	</b:forEach>
+								    </b:if>
+								    <b:if test="${empty rpNetBalanceRecordTForm.cityCode  }">
+							        	<option value="">请选择</option>
+							        </b:if>
 							      	<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="b" %>
 								 	 <b:forEach items="${cityList}" var="city">
 								 	 	<option value="${city.cityCode }">${city.cityName}</option>
@@ -52,7 +62,16 @@
 							    <label for="inputPassword3" class="col-sm-2 control-label">产品编号</label>
 							    <div class="col-sm-4">
 							      <select id="productCode" name="productCode" class="form-control">
-							      	<option value="">请选择</option>
+							      	<b:if test="${not empty rpNetBalanceRecordTForm.productCode}">
+								    	<b:forEach items="${productList}" var="productList">
+                                            <b:if test="${rpNetBalanceRecordTForm.productCode==productList.productCode}">
+                                                <option value="${ rpNetBalanceRecordTForm.productCode  }">${productList.productName}</option>
+                                            </b:if>
+                                       	</b:forEach>
+								    </b:if>
+								    <b:if test="${empty rpNetBalanceRecordTForm.productCode  }">
+							        	<option value="">请选择</option>
+							        </b:if>
 							      	<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="b" %>
 								 	 <b:forEach items="${productList}" var="product">
 								 	 	<option value="${product.productCode }">${product.productName}</option>
@@ -62,7 +81,16 @@
 							    <label for="inputPassword3" class="col-sm-2 control-label">结算类型</label>
 							    <div class="col-sm-4">
 							      <select id="balanceTypeCode" name="balanceTypeCode" class="form-control">
-							      	<option value="">请选择</option>
+							      	<b:if test="${not empty rpNetBalanceRecordTForm.balanceTypeCode}">
+								    	<b:forEach items="${rpBalanceTypeCodeTList}" var="rpBalanceTypeCodeTList">
+                                            <b:if test="${rpNetBalanceRecordTForm.balanceTypeCode==rpBalanceTypeCodeTList.balanceTypeCode}">
+                                                <option value="${ rpNetBalanceRecordTForm.balanceTypeCode  }">${rpBalanceTypeCodeTList.balanceTypeName}</option>
+                                            </b:if>
+                                       	</b:forEach>
+								    </b:if>
+								    <b:if test="${empty rpNetBalanceRecordTForm.balanceTypeCode  }">
+							        	<option value="">请选择</option>
+							        </b:if>
 							      	<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="b" %>
 								 	 <b:forEach items="${rpBalanceTypeCodeTList}" var="rpBalanceTypeCodeTList">
 								 	 	<option value="${rpBalanceTypeCodeTList.balanceTypeCode }">${rpBalanceTypeCodeTList.balanceTypeName}</option>
@@ -73,7 +101,16 @@
 							    <label for="inputPassword3" class="col-sm-2 control-label">结算运运营商</label>
 							    <div class="col-sm-4">
 							      <select id="balanceSpCode" name="balanceSpCode" class="form-control">
-							      	<option value="">请选择</option>
+							      	<b:if test="${not empty rpNetBalanceRecordTForm.balanceSpCode}">
+								    	<b:forEach items="${rpBalanceSpCodeTList}" var="rpBalanceSpCodeTList">
+                                            <b:if test="${rpNetBalanceRecordTForm.balanceSpCode==rpBalanceSpCodeTList.balanceSpCode}">
+                                                <option value="${ rpNetBalanceRecordTForm.balanceSpCode  }">${rpBalanceSpCodeTList.balanceSpName}</option>
+                                            </b:if>
+                                       	</b:forEach>
+								    </b:if>
+								    <b:if test="${empty rpNetBalanceRecordTForm.balanceSpCode  }">
+							        	<option value="">请选择</option>
+							        </b:if>
 							      	<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="b" %>
 								 	 <b:forEach items="${rpBalanceSpCodeTList}" var="rpBalanceSpCodeTList">
 								 	 	<option value="${rpBalanceSpCodeTList.balanceSpCode }">${rpBalanceSpCodeTList.balanceSpName}</option>
@@ -103,14 +140,41 @@
 				 	<div class="col-sm-10">
 					</div>
 				  	<div class="col-sm-1">
-				      <button type="button" class="btn btn-primary">导出excel</button>
+				      <button onclick="exportData()" type="button" class="btn btn-primary">导出excel</button>
 				    </div>
 				    <div class="col-sm-1">
-				      <button type="button" class="btn btn-primary">导出txt</button>
+				      <button onclick="exportDataTxt()" type="button" class="btn btn-primary">导出txt</button>
 				    </div>
+				     <script type="text/javascript">
+			    //点击"导出Excle"
+			      function exportData(){
+			          $('#myTable').tableExport({
+			              type: 'excel',//导出文件类型，[ 'csv', 'txt', 'sql', 'doc', 'excel', 'xlsx', 'pdf']
+			              exportDataType: "basic",//'basic':当前页的数据, 'all':全部的数据, 'selected':选中的数据
+			              ignoreColumn: [0],//忽略某一列的索引
+			              fileName: '卡收入归集',//下载文件名称
+			              onCellHtmlData: function (cell, row, col, data){//处理导出内容,自定义某一行、某一列、某个单元格的内容
+			                  console.info(data);
+			                  return data;
+			              },
+			          });
+			      }
+			      function exportDataTxt(){
+			          $('#myTable').tableExport({
+			              type: 'txt',//导出文件类型，[ 'csv', 'txt', 'sql', 'doc', 'excel', 'xlsx', 'pdf']
+			              exportDataType: "basic",//'basic':当前页的数据, 'all':全部的数据, 'selected':选中的数据
+			              ignoreColumn: [0],//忽略某一列的索引
+			              fileName: '卡收入归集',//下载文件名称
+			              onCellHtmlData: function (cell, row, col, data){//处理导出内容,自定义某一行、某一列、某个单元格的内容
+			                  console.info(data);
+			                  return data;
+			              },
+			          });
+			      }
+			      </script>
 				    <br><br><br>
 				    <form class="form-horizontal">
-						  <table class="table table-bordered table-hover table-striped">
+						  <table id="myTable" class="table table-bordered table-hover table-striped">
 							  <tr>
 							  	<th><input type="checkbox"></th>
 							  	<th>序号</th>
@@ -123,7 +187,6 @@
 							  	<th>稽核人</th>
 							  	<th>稽核时间</th>
 							  	<th>稽核状态</th>
-							  	<th colspan="2">操作</th>
 							  </tr>
 							  <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 							  <b:forEach items="${rpNetBalanceRecordTList}" var="rpNetBalanceRecordTList">
@@ -139,36 +202,80 @@
 									<td>${rpNetBalanceRecordTList.checkPerson}</td>
 									<td><fmt:formatDate type="date" value="${rpNetBalanceRecordTList.checkTime}"/></td>
 									<td>${rpNetBalanceRecordTList.checkStatus}</td>
-									<td><a href="#">编辑</a></td>
-									<td><a href="#">删除</a></td>
 								</tr>
 								</b:forEach>
-								<tr>
-									<td><input type="checkbox"></td>
-									<td>1</td>
-									<td>大连</td>
-									<td>产品A</td>
-									<td>运营商1</td>
-									<td>支付宝</td>
-									<td>张三</td>
-									<td>500.00</td>
-									<td>王五</td>
-									<td>2020年7月28日</td>
-									<td>已稽核</td>
-									<td><a href="#">编辑</a></td>
-									<td><a href="#">删除</a></td>
-								</tr>
 						  </table>
 						</form>
+						<div>
+							    当前第${PageInfo.pageNum}页，总共${PageInfo.pages}页，总共${PageInfo.total}条记录
+							</div>
+							<ul class="pagination">
+							    <li class="active"><a href="javascript:void(0)" onclick="ShouYe()">首页</a></li>
+							    <b:if test="${PageInfo.pageNum == 1 }">
+							        <li><a href="javascript:void(0)" onclick="QianYiYe1()">&laquo;</a></li>
+							    </b:if>
+							    <b:if test="${PageInfo.pageNum != 1 }">
+							        <li><a href="javascript:void(0)" onclick="QianYiYe2()">&laquo;</a></li>
+							    </b:if>
+							
+							    <b:forEach items="${PageInfo.navigatepageNums }" var="page_Num">
+							
+							        <b:if test="${page_Num == PageInfo.pageNum }">
+							            <li class="active"><a href="#">${page_Num}</a></li>
+							        </b:if>
+							        <b:if test="${page_Num != PageInfo.pageNum }">
+							            <li><a href="javascript:void(0)" onclick="DangQianYe(${page_Num})">${page_Num}</a></li>
+							        </b:if>
+							
+							    </b:forEach>
+							
+							    <b:if test="${PageInfo.pageNum == PageInfo.pages }">
+							        <li><a href="javascript:void(0)" onclick="XiaYiYe1()">&laquo;</a></li>
+							    </b:if>
+							    <b:if test="${PageInfo.pageNum != PageInfo.pages }">
+							        <li><a href="javascript:void(0)" onclick="XiaYiYe2()">&raquo;</a></li>
+							    </b:if>
+							    <li class="active"> <a href="javascript:void(0)" onclick="WeiYe()">尾页</a></li>
+							</ul>
+							<script type="text/javascript">
+							function WeiYe(){
+							    document.demo.action="/telereport2/imputation/internet?page=${PageInfo.pages}";
+								document.demo.submit();
+							}
+							function ShouYe(){
+							    document.demo.action="/telereport2/imputation/internet?page=1";
+								document.demo.submit();
+							}
+							function QianYiYe1(){
+							    document.demo.action="/telereport2/imputation/internet?page=1";
+								document.demo.submit();
+							}
+							function QianYiYe2(){
+							    document.demo.action="/telereport2/imputation/internet?page=${PageInfo.pageNum-1}";
+								document.demo.submit();
+							}
+							function XiaYiYe1(){
+							    document.demo.action="/telereport2/imputation/internet?page=${PageInfo.pages}";
+								document.demo.submit();
+							}
+							function XiaYiYe2(){
+							    document.demo.action="/telereport2/imputation/internet?page=${PageInfo.pageNum+1}";
+								document.demo.submit();
+							}
+							function DangQianYe(Page_Num){
+							    document.demo.action="/telereport2/imputation/internet?page="+Page_Num;
+								document.demo.submit();
+							}
+							</script>
 				  </div>
 				</div>
 				<!--收入轨迹查询结果结束-->
 				<!--可视化统计图开始-->
-				<div class="panel panel-default">
+				<!-- div class="panel panel-default">
 				  <div class="panel-heading">可视化统计图</div>
-				  <div class="panel-body">
+				  <div class="panel-body"-->
 				    <!--为ECharts准备一个具备大小（宽高）的Dom-->
-				    <div id="main" class="col-md-6" style="width: 600px;height:400px;"></div>
+				    <!--div id="main" class="col-md-6" style="width: 600px;height:400px;"></div>
 				    <div id="main2" class="col-md-6" style="width: 600px;height:400px;"></div>
 				    <script type="text/javascript">
 				        var myChart = echarts.init(document.getElementById('main'));
@@ -220,7 +327,7 @@
 				        myChart.setOption(option);
 				    </script>
 				  </div>
-				</div>
+				</div -->
 				<!--可视化结束-->
 			</div>
 			<!--网间收入归集结束-->

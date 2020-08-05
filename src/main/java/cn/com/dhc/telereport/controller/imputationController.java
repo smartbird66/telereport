@@ -2,11 +2,16 @@ package cn.com.dhc.telereport.controller;
 
 import java.util.List;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 
 import cn.com.dhc.telereport.entity.RpAccountGatherT;
 import cn.com.dhc.telereport.entity.RpAccountTypeCodeT;
@@ -25,6 +30,7 @@ import cn.com.dhc.telereport.form.RpBusinessFeeGatherTForm;
 import cn.com.dhc.telereport.form.RpCardSaleRecordTForm;
 import cn.com.dhc.telereport.form.RpNetBalanceRecordTForm;
 import cn.com.dhc.telereport.form.RpPreFeeGatherTForm;
+import cn.com.dhc.telereport.mapper.RpAccountGatherTMapper;
 import cn.com.dhc.telereport.service.RpAccountFeeRecordTService;
 import cn.com.dhc.telereport.service.RpAccountGatherTService;
 import cn.com.dhc.telereport.service.RpAccountTypeCodeTService;
@@ -68,7 +74,8 @@ public class imputationController {
 	private RpBusinessFeeGatherTService rpBusinessFeeGatherTService;
 	@Autowired  // 通知单收入编码
 	private RpBusinessFeeTypeCodeTService rpBusinessFeeTypeCodeTService;
-	
+	@Autowired // 调用mapper查询
+	private RpAccountGatherTMapper  rpAccountGatherTMapper;
 	// 出账归集
 	@RequestMapping(value="/account")
 	public String accountOutMonth(Model model) {
@@ -87,7 +94,11 @@ public class imputationController {
 	
 	// 出账归集查询
 	@RequestMapping(value="/account", method=RequestMethod.POST)
-	public String accountOutMonth2(RpAccountGatherTForm rpAccountGatherTForm,Model model) {
+	public String  accountOutMonth2(@RequestParam(value = "page" ,defaultValue = "1") int page,RpAccountGatherTForm rpAccountGatherTForm,Model model) {
+		// 重新加载查询条件
+		RpAccountGatherTForm rpAccountGatherTFormReturn = new RpAccountGatherTForm();
+		BeanUtils.copyProperties(rpAccountGatherTForm,rpAccountGatherTFormReturn);
+		model.addAttribute("rpAccountGatherTForm",rpAccountGatherTFormReturn);
 		// 调用Service层的城市编码
 		List<RpCityCodeT> list = rpCityCodeTService.selectAllCity();
 		model.addAttribute("cityList", list); //属性名随便起
@@ -96,13 +107,44 @@ public class imputationController {
 		model.addAttribute("productList", rpProductCodeTList); 
 		// 调用Service层的出账类型编码
 		List<RpAccountTypeCodeT> rpAccountTypeCodeTList = rpAccountTypeCodeTService.selectAllRpAccountTypeCodeT();
-		model.addAttribute("rpAccountTypeCodeTList", rpAccountTypeCodeTList); 
-		// 调用service层的post查询出账归集功能
-		List<RpAccountGatherT> rpAccountGatherTList = rpAccountGatherTService.selectByInfo(rpAccountGatherTForm);
-		model.addAttribute("rpAccountGatherTList", rpAccountGatherTList);
+		model.addAttribute("rpAccountTypeCodeTList", rpAccountTypeCodeTList);
+		
+		// 分页,调用service层的post查询出账归集功能
+		PageHelper.startPage(page, 5);
+       	List<RpAccountGatherT>  userList= rpAccountGatherTService.selectByInfo(rpAccountGatherTForm);
+        PageInfo pages = new PageInfo(userList,20);
+        model.addAttribute("PageInfo",pages);
+        /*return pages;*/
 		return "account";
 	}
 	
+	
+
+	@RequestMapping("/success")
+    public String success(@RequestParam(value = "page" ,defaultValue = "1") int page,RpAccountGatherTForm rpAccountGatherTForm, Model model){
+	// 重新加载查询条件
+	RpAccountGatherTForm rpAccountGatherTFormReturn = new RpAccountGatherTForm();
+	BeanUtils.copyProperties(rpAccountGatherTForm,rpAccountGatherTFormReturn);
+	model.addAttribute("rpAccountGatherTForm",rpAccountGatherTFormReturn);
+	// 调用Service层的城市编码
+	List<RpCityCodeT> list = rpCityCodeTService.selectAllCity();
+	model.addAttribute("cityList", list); //属性名随便起
+	// 调用Service层的产品编码
+	List<RpProductCodeT> rpProductCodeTList = rpProductCodeTService.selectAllProduct();
+	model.addAttribute("productList", rpProductCodeTList); 
+	// 调用Service层的出账类型编码
+	List<RpAccountTypeCodeT> rpAccountTypeCodeTList = rpAccountTypeCodeTService.selectAllRpAccountTypeCodeT();
+	model.addAttribute("rpAccountTypeCodeTList", rpAccountTypeCodeTList); 
+		
+	PageHelper.startPage(page, 5);
+    System.out.println("page 2");
+//    RpAccountGatherTForm rpAccountGatherTForm = new RpAccountGatherTForm();
+    List<RpAccountGatherT> rpAccountGatherTList = rpAccountGatherTService.selectByInfo(rpAccountGatherTForm);
+    PageInfo pages = new PageInfo(rpAccountGatherTList,20);
+    model.addAttribute("PageInfo",pages);
+    
+    return "account";
+    }
 	// 卡销售归集
 	@RequestMapping(value="/cardTo")
 	public String cardTo(Model model) {
@@ -117,8 +159,11 @@ public class imputationController {
 	
 	// 卡销售归集查询
 	@RequestMapping(value="/cardTo", method=RequestMethod.POST)
-	public String cardTo2(RpCardSaleRecordTForm rpCardSaleRecordTForm,Model model) {
-		System.out.println(rpCardSaleRecordTForm);
+	public String cardTo2(@RequestParam(value = "page" ,defaultValue = "1") int page,RpCardSaleRecordTForm rpCardSaleRecordTForm,Model model) {
+		// 重新加载查询条件
+		RpCardSaleRecordTForm rpCardSaleRecordTFormReturn = new RpCardSaleRecordTForm();
+		BeanUtils.copyProperties(rpCardSaleRecordTForm,rpCardSaleRecordTFormReturn);
+		model.addAttribute("rpCardSaleRecordTForm",rpCardSaleRecordTFormReturn);
 		// 调用service层的城市编码
 		List<RpCityCodeT> list = rpCityCodeTService.selectAllCity();
 		model.addAttribute("cityList", list); //属性名随便起
@@ -126,8 +171,13 @@ public class imputationController {
 		List<RpProductCodeT> rpProductCodeTList = rpProductCodeTService.selectAllProduct();
 		model.addAttribute("productList", rpProductCodeTList); 
 		// 调用service层的卡销售归集查询 
+//		List<RpCardSaleRecordT> RpCardSaleRecordTList = rpCardSaleRecordTService.selectByInfo(rpCardSaleRecordTForm);
+//		model.addAttribute("RpCardSaleRecordTList", RpCardSaleRecordTList);
+		// 分页,调用service层的post查询出账归集功能
+		PageHelper.startPage(page, 5);
 		List<RpCardSaleRecordT> RpCardSaleRecordTList = rpCardSaleRecordTService.selectByInfo(rpCardSaleRecordTForm);
-		model.addAttribute("RpCardSaleRecordTList", RpCardSaleRecordTList);
+        PageInfo pages = new PageInfo(RpCardSaleRecordTList,20);
+        model.addAttribute("PageInfo",pages);
 		return "cardTo";
 	}
 
@@ -147,7 +197,11 @@ public class imputationController {
 	}
 	
 	@RequestMapping(value="/stored",method=RequestMethod.POST)
-	public String stored2(RpPreFeeGatherTForm rpPreFeeGatherTForm,Model model) {
+	public String stored2(@RequestParam(value = "page" ,defaultValue = "1") int page,RpPreFeeGatherTForm rpPreFeeGatherTForm,Model model) {
+		// 重新加载查询条件
+		RpPreFeeGatherTForm rpPreFeeGatherTFormReturn = new RpPreFeeGatherTForm();
+		BeanUtils.copyProperties(rpPreFeeGatherTForm,rpPreFeeGatherTFormReturn);
+		model.addAttribute("rpPreFeeGatherTForm",rpPreFeeGatherTFormReturn);
 		// 调用service层的城市编码
 		List<RpCityCodeT> list = rpCityCodeTService.selectAllCity();
 		model.addAttribute("cityList", list); //属性名随便起
@@ -158,8 +212,13 @@ public class imputationController {
 		List<RpWriteOffTypeCodeT> rpWriteOffTypeCodeTList = rpWriteOffTypeCodeTService.selectAllRpWriteOffTypeCodeT();
 		model.addAttribute("rpWriteOffTypeCodeTList", rpWriteOffTypeCodeTList);
 		// 调用service层的预转存归集查询
-		List<RpPreFeeGatherT> rpPreFeeGatherTList = rpPreFeeGatherTService.selectByInfo(rpPreFeeGatherTForm);
-		model.addAttribute("RpPreFeeGatherTList", rpPreFeeGatherTList);
+//		List<RpPreFeeGatherT> rpPreFeeGatherTList = rpPreFeeGatherTService.selectByInfo(rpPreFeeGatherTForm);
+//		model.addAttribute("RpPreFeeGatherTList", rpPreFeeGatherTList);
+		// 分页,调用service层的post查询出账归集功能
+		PageHelper.startPage(page, 5);
+		List<RpPreFeeGatherT> rpPreFeeGatherTList = rpPreFeeGatherTService.selectByInfo(rpPreFeeGatherTForm); 
+		PageInfo pages = new PageInfo(rpPreFeeGatherTList,20);
+        model.addAttribute("PageInfo",pages);
 		return "stored";
 	}
 	
@@ -182,7 +241,11 @@ public class imputationController {
 	}
 	
 	@RequestMapping(value="/internet", method=RequestMethod.POST)
-	public String internet2(RpNetBalanceRecordTForm rpNetBalanceRecordTForm,Model model) {
+	public String internet2(@RequestParam(value = "page" ,defaultValue = "1") int page,RpNetBalanceRecordTForm rpNetBalanceRecordTForm,Model model) {
+		// 重新加载查询条件
+		RpNetBalanceRecordTForm rpNetBalanceRecordTFormReturn = new RpNetBalanceRecordTForm();
+		BeanUtils.copyProperties(rpNetBalanceRecordTForm,rpNetBalanceRecordTFormReturn);
+		model.addAttribute("rpNetBalanceRecordTForm",rpNetBalanceRecordTFormReturn);
 		// 调用service层的城市编码
 		List<RpCityCodeT> list = rpCityCodeTService.selectAllCity();
 		model.addAttribute("cityList", list); //属性名随便起
@@ -196,8 +259,13 @@ public class imputationController {
 		List<RpBalanceSpCodeT> rpBalanceSpCodeTList = rpBalanceSpCodeTService.selectAll();
 		model.addAttribute("rpBalanceSpCodeTList", rpBalanceSpCodeTList);
 		// 调用service层的网间结算归集查询
+//		List<RpNetBalanceRecordT> rpNetBalanceRecordTList = rpNetBalanceRecordTService.selectByInfo(rpNetBalanceRecordTForm);
+//		model.addAttribute("rpNetBalanceRecordTList",rpNetBalanceRecordTList);
+		// 分页,调用service层的post查询出账归集功能
+		PageHelper.startPage(page, 5);
 		List<RpNetBalanceRecordT> rpNetBalanceRecordTList = rpNetBalanceRecordTService.selectByInfo(rpNetBalanceRecordTForm);
-		model.addAttribute("rpNetBalanceRecordTList",rpNetBalanceRecordTList);
+		PageInfo pages = new PageInfo(rpNetBalanceRecordTList,20);
+        model.addAttribute("PageInfo",pages);
 		return "internet";
 	}
 	
@@ -218,7 +286,11 @@ public class imputationController {
 	
 	// 通知单归集查询
 	@RequestMapping(value="/messageBill",method=RequestMethod.POST)
-	public String messageBill2(RpBusinessFeeGatherTForm rpBusinessFeeGatherTForm,Model model) {
+	public String messageBill2(@RequestParam(value = "page" ,defaultValue = "1") int page,RpBusinessFeeGatherTForm rpBusinessFeeGatherTForm,Model model) {
+		// 重新加载查询条件
+		RpBusinessFeeGatherTForm rpBusinessFeeGatherTFormReturn = new RpBusinessFeeGatherTForm();
+		BeanUtils.copyProperties(rpBusinessFeeGatherTForm,rpBusinessFeeGatherTFormReturn);
+		model.addAttribute("rpBusinessFeeGatherTForm",rpBusinessFeeGatherTFormReturn);
 		// 调用service层的城市编码
 		List<RpCityCodeT> list = rpCityCodeTService.selectAllCity();
 		model.addAttribute("cityList", list); //属性名随便起
@@ -229,8 +301,13 @@ public class imputationController {
 		List<RpBusinessFeeTypeCodeT> rpBusinessFeeTypeCodeTList = rpBusinessFeeTypeCodeTService.selectAll();
 		model.addAttribute("rpBusinessFeeTypeCodeTList",rpBusinessFeeTypeCodeTList);
 		// 调用Service层的通知单查询
+//		List<RpBusinessFeeGatherT> rpBusinessFeeGatherTList = rpBusinessFeeGatherTService.selectByInfo(rpBusinessFeeGatherTForm);
+//		model.addAttribute("rpBusinessFeeGatherTList",rpBusinessFeeGatherTList);
+		// 分页,调用service层的post查询通知单归集功能
+		PageHelper.startPage(page, 5);
 		List<RpBusinessFeeGatherT> rpBusinessFeeGatherTList = rpBusinessFeeGatherTService.selectByInfo(rpBusinessFeeGatherTForm);
-		model.addAttribute("rpBusinessFeeGatherTList",rpBusinessFeeGatherTList);
+		PageInfo pages = new PageInfo(rpBusinessFeeGatherTList,20);
+        model.addAttribute("PageInfo",pages);
 		return "messageBill";
 	}
 }

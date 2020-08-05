@@ -32,16 +32,32 @@
 					<div id="myTabContent" class="tab-content">
 					    <div class="tab-pane fade in active" id="storedMonth">
 					    	<br><br>
-				        <form action="${pageContext.request.contextPath}/imputation/stored" method="post" class="form-horizontal">
+				        <form id="demo" action="${pageContext.request.contextPath}/imputation/stored" method="post" class="form-horizontal">
 						  <div class="form-group">
 						    <label for="inputPassword3" class="col-sm-2 control-label">收入月份</label>
 						    <div class="col-sm-4">
-						      <input name="accountMonth" id="accountMonth" type="month" class="form-control">
+						        <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="b" %>
+								<b:if test="${not empty rpPreFeeGatherTForm.accountMonth}">
+							        <input value="${rpPreFeeGatherTForm.accountMonth}" name="accountMonth" id="accountMonth" type="month" class="form-control">
+							    </b:if>
+							    <b:if test="${empty rpPreFeeGatherTForm.accountMonth  }">
+						        	<input name="accountMonth" id="accountMonth" type="month" class="form-control">
+						        </b:if>
 						    </div>
 						    <label for="inputPassword3" class="col-sm-2 control-label">城市</label>
 						    <div class="col-sm-4">
 						      <select name="cityCode" id="cityCode" class="form-control">
-						      	<option value="">请选择</option>
+						      	<b:if test="${not empty rpPreFeeGatherTForm.cityCode}">
+						    	<!-- option value="${ rpAccountGatherTForm.cityCode  }">请选择</option-->
+						    	<b:forEach items="${cityList}" var="cityList">
+                                   <b:if test="${rpPreFeeGatherTForm.cityCode==cityList.cityCode}">
+                                       <option value="${ rpPreFeeGatherTForm.cityCode  }">${cityList.cityName}</option>
+                                   </b:if>
+                               	</b:forEach>
+							    </b:if>
+							    <b:if test="${empty rpPreFeeGatherTForm.cityCode  }">
+						        	<option value="">请选择</option>
+						        </b:if>
 						      	<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="b" %>
 							 	 <b:forEach items="${cityList}" var="city">
 							 	 	<option value="${city.cityCode }">${city.cityName}</option>
@@ -52,7 +68,16 @@
 						      <label for="inputPassword3" class="col-sm-2 control-label">产品编号</label>
 							    <div class="col-sm-4">
 							      <select id="productCode" name="productCode" class="form-control">
-							      	<option value="">请选择</option>
+							      	<b:if test="${not empty rpPreFeeGatherTForm.productCode}">
+								    	<b:forEach items="${productList}" var="productList">
+                                           <b:if test="${rpPreFeeGatherTForm.productCode==productList.productCode}">
+                                               <option value="${ rpPreFeeGatherTForm.productCode  }">${productList.productName}</option>
+                                           </b:if>
+                                      	</b:forEach>
+								    </b:if>
+								    <b:if test="${empty rpPreFeeGatherTForm.productCode  }">
+							        	<option value="">请选择</option>
+							        </b:if>
 							      	<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="b" %>
 								 	 <b:forEach items="${productList}" var="product">
 								 	 	<option value="${product.productCode }">${product.productName}</option>
@@ -62,7 +87,16 @@
 							    <label for="inputPassword3" class="col-sm-2 control-label">销账类型</label>
 							    <div class="col-sm-4">
 							      <select id="writeOffTypeCode" name="writeOffTypeCode" class="form-control">
-							      	<option value="">请选择</option>
+							      	<b:if test="${not empty rpPreFeeGatherTForm.writeOffTypeCode}">
+								    	<b:forEach items="${rpWriteOffTypeCodeTList}" var="rpWriteOffTypeCodeTList">
+                                           <b:if test="${rpPreFeeGatherTForm.writeOffTypeCode==rpWriteOffTypeCodeTList.writeOffTypeCode}">
+                                               <option value="${ rpPreFeeGatherTForm.writeOffTypeCode  }">${rpWriteOffTypeCodeTList.writeOffTypeName}</option>
+                                           </b:if>
+                                      	</b:forEach>
+								    </b:if>
+								    <b:if test="${empty rpPreFeeGatherTForm.writeOffTypeCode  }">
+							        	<option value="">请选择</option>
+							        </b:if>
 							      	<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="b" %>
 								 	 <b:forEach items="${rpWriteOffTypeCodeTList}" var="rpWriteOffTypeCodeTList">
 								 	 	<option value="${rpWriteOffTypeCodeTList.writeOffTypeCode }">${rpWriteOffTypeCodeTList.writeOffTypeName}</option>
@@ -92,14 +126,41 @@
 			  	<div class="col-sm-10">
 				</div>
 			  	<div class="col-sm-1">
-			      <button type="button" class="btn btn-primary">导出excel</button>
+			      <button onclick="exportData()" type="button" class="btn btn-primary">导出excel</button>
 			    </div>
 			    <div class="col-sm-1">
-			      <button type="button" class="btn btn-primary">导出txt</button>
+			      <button onclick="exportDataTxt()" type="button" class="btn btn-primary">导出txt</button>
 			    </div>
+			     <script type="text/javascript">
+			    //点击"导出Excle"
+			      function exportData(){
+			          $('#myTable').tableExport({
+			              type: 'excel',//导出文件类型，[ 'csv', 'txt', 'sql', 'doc', 'excel', 'xlsx', 'pdf']
+			              exportDataType: "basic",//'basic':当前页的数据, 'all':全部的数据, 'selected':选中的数据
+			              ignoreColumn: [0],//忽略某一列的索引
+			              fileName: '卡收入归集',//下载文件名称
+			              onCellHtmlData: function (cell, row, col, data){//处理导出内容,自定义某一行、某一列、某个单元格的内容
+			                  console.info(data);
+			                  return data;
+			              },
+			          });
+			      }
+			      function exportDataTxt(){
+			          $('#myTable').tableExport({
+			              type: 'txt',//导出文件类型，[ 'csv', 'txt', 'sql', 'doc', 'excel', 'xlsx', 'pdf']
+			              exportDataType: "basic",//'basic':当前页的数据, 'all':全部的数据, 'selected':选中的数据
+			              ignoreColumn: [0],//忽略某一列的索引
+			              fileName: '卡收入归集',//下载文件名称
+			              onCellHtmlData: function (cell, row, col, data){//处理导出内容,自定义某一行、某一列、某个单元格的内容
+			                  console.info(data);
+			                  return data;
+			              },
+			          });
+			      }
+			      </script>
 			    <br><br><br>
 			    <form class="form-horizontal">
-					  <table class="table table-bordered table-hover table-striped">
+					  <table id="myTable" class="table table-bordered table-hover table-striped">
 						  <tr>
 						  	<th><input type="checkbox"></th>
 						  	<th>出账月份</th>
@@ -107,18 +168,7 @@
 						  	<th>产品</th>
 						  	<th>出账类型</th>
 						  	<th>录入金额</th>
-						  	<th colspan="2">操作</th>
 						  </tr>
-							<tr>
-								<td><input type="checkbox"></td>
-								<td>2020年7月</td>
-								<td>大连</td>
-								<td>产品A</td>
-								<td>类型A</td>
-								<td>10000.0</td>
-								<td><a href="#">编辑</a></td>
-								<td><a href="#">删除</a></td>
-							</tr>
 							<b:forEach items="${rpBalanceTypeCodeTList}" var="rpBalanceTypeCodeTList">
 							<tr>
 								<td><input type="checkbox"></td>
@@ -127,74 +177,75 @@
 								<td>${rpBalanceTypeCodeTList.rpProductCodeT.productName}</td>
 								<td>${rpBalanceTypeCodeTList.rpWriteOffTypeCodeT.writeOffTypeName}</td>
 								<td>${rpBalanceTypeCodeTList.writeOffFee}</td>
-								<td><a href="#">编辑</a></td>
-								<td><a href="#">删除</a></td>
 							</tr>
 							</b:forEach>
 					  </table>
 					</form>
+					<div>
+					    当前第${PageInfo.pageNum}页，总共${PageInfo.pages}页，总共${PageInfo.total}条记录
+					</div>
+					<ul class="pagination">
+					    <li class="active"><a href="javascript:void(0)" onclick="ShouYe()">首页</a></li>
+					    <b:if test="${PageInfo.pageNum == 1 }">
+					        <li><a href="javascript:void(0)" onclick="QianYiYe1()">&laquo;</a></li>
+					    </b:if>
+					    <b:if test="${PageInfo.pageNum != 1 }">
+					        <li><a href="javascript:void(0)" onclick="QianYiYe2()">&laquo;</a></li>
+					    </b:if>
+					
+					    <b:forEach items="${PageInfo.navigatepageNums }" var="page_Num">
+					
+					        <b:if test="${page_Num == PageInfo.pageNum }">
+					            <li class="active"><a href="#">${page_Num}</a></li>
+					        </b:if>
+					        <b:if test="${page_Num != PageInfo.pageNum }">
+					            <li><a href="javascript:void(0)" onclick="DangQianYe(${page_Num})">${page_Num}</a></li>
+					        </b:if>
+					
+					    </b:forEach>
+					
+					    <b:if test="${PageInfo.pageNum == PageInfo.pages }">
+					        <li><a href="javascript:void(0)" onclick="XiaYiYe1()">&laquo;</a></li>
+					    </b:if>
+					    <b:if test="${PageInfo.pageNum != PageInfo.pages }">
+					        <li><a href="javascript:void(0)" onclick="XiaYiYe2()">&raquo;</a></li>
+					    </b:if>
+					    <li class="active"> <a href="javascript:void(0)" onclick="WeiYe()">尾页</a>
+					    <!--a href="/telereport2/imputation/success?page=${PageInfo.pages}">尾页</a--></li>
+					</ul>
+					<script type="text/javascript">
+					function WeiYe(){
+					    document.demo.action="/telereport2/imputation/stored?page=${PageInfo.pages}";
+						document.demo.submit();
+					}
+					function ShouYe(){
+					    document.demo.action="/telereport2/imputation/stored?page=1";
+						document.demo.submit();
+					}
+					function QianYiYe1(){
+					    document.demo.action="/telereport2/imputation/stored?page=1";
+						document.demo.submit();
+					}
+					function QianYiYe2(){
+					    document.demo.action="/telereport2/imputation/stored?page=${PageInfo.pageNum-1}";
+						document.demo.submit();
+					}
+					function XiaYiYe1(){
+					    document.demo.action="/telereport2/imputation/stored?page=${PageInfo.pages}";
+						document.demo.submit();
+					}
+					function XiaYiYe2(){
+					    document.demo.action="/telereport2/imputation/stored?page=${PageInfo.pageNum+1}";
+						document.demo.submit();
+					}
+					function DangQianYe(Page_Num){
+					    document.demo.action="/telereport2/imputation/stored?page="+Page_Num;
+						document.demo.submit();
+					}
+					</script>
 			  </div>
 			</div>
 			<!--收入轨迹查询结果结束-->
-			<!--可视化统计图开始-->
-			<div class="panel panel-default">
-			  <div class="panel-heading">可视化统计图</div>
-			  <div class="panel-body">
-			    <div id="stored_main" class="col-md-6" style="width: 600px;height:400px;"></div>
-			    <div id="stored_main2" class="col-md-6" style="width: 600px;height:400px;"></div>
-			    <script type="text/javascript">
-			        // 基于准备好的dom，初始化echarts实例
-			        var myChart = echarts.init(document.getElementById('stored_main'));
-			
-			        // 指定图表的配置项和数据
-			        option = {
-							    xAxis: {
-							        type: 'category',
-							        data: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'
-							            , '11', '12', '13', '14', '15', '16', '17', '18', '19', '20'
-							            , '21', '22', '23', '24', '25', '26', '27', '28', '29', '30'
-							            , '31']
-							    },
-							    yAxis: {
-							        type: 'value'
-							    },
-							    series: [{
-							        data: [820, 932, 901, 934, 1290, 1330, 1320],
-							        type: 'line'
-							    }]
-							};
-			
-			        // 使用刚指定的配置项和数据显示图表。
-			        myChart.setOption(option);
-			    </script>
-			    <script type="text/javascript">
-			        // 基于准备好的dom，初始化echarts实例
-			        var myChart = echarts.init(document.getElementById('stored_main2'));
-			
-			        // 指定图表的配置项和数据
-			        option = {
-							    xAxis: {
-							        type: 'category',
-							        data: ['产品A', '产品B', '产品C', '产品D', '产品E', '产品F', '产品G']
-							    },
-							    yAxis: {
-							        type: 'value'
-							    },
-							    series: [{
-							        data: [120, 200, 150, 80, 70, 110, 130],
-							        type: 'bar',
-							        showBackground: true,
-							        backgroundStyle: {
-							            color: 'rgba(220, 220, 220, 0.8)'
-							        }
-							    }]
-							};
-			        // 使用刚指定的配置项和数据显示图表。
-			        myChart.setOption(option);
-			    </script>
-			  </div>
-			</div>
-			<!--可视化结束-->
 			</div>
 			<!--预转存归集结束-->
 		  </div>
