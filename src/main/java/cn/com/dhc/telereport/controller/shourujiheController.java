@@ -92,7 +92,6 @@ public class shourujiheController {
         return "shourujihe/account";
     }
 
-
     //出账收入稽核状态变更
     @RequestMapping(value = "/account/update",params = {"Aid","Cid"})
     public String accountCheckChange2(String Aid,String Cid, Model model){
