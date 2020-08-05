@@ -41,7 +41,7 @@
                                                     <option value="">全部</option>
                                                     <%@taglib  uri="http://java.sun.com/jsp/jstl/core" prefix="city" %>
                                                     <city:forEach items="${cityList}" var="city" >
-                                                        <option value="${cityCode}">${city.cityName}</option>
+                                                        <option value="${city.cityCode}">${city.cityName}</option>
                                                     </city:forEach>
                                                 </select>
                                             </div>
@@ -51,7 +51,7 @@
                                                     <option value="">全部</option>
                                                     <%@taglib  uri="http://java.sun.com/jsp/jstl/core" prefix="product" %>
                                                     <product:forEach items="${productList}" var="product" >
-                                                        <option value="${productCode}">${product.productName}</option>
+                                                        <option value="${product.productCode}">${product.productName}</option>
                                                     </product:forEach>
                                                 </select>
                                             </div>
@@ -91,35 +91,37 @@
 
                                     <table class="table table-bordered table-hover table-striped">
                                         <tr>
-                                            <th><input type="checkbox"/></th>
+                                            <th><input type="checkbox"></th>
                                             <th>序号</th>
-                                            <th>结算月份</th>
-                                            <th>城市编号</th>
-                                            <th>产品编号</th>
-                                            <th>结算运营商编码</th>
-                                            <th>结算类型编码</th>
+                                            <th>城市</th>
+                                            <th>产品</th>
+                                            <th>运营商编号</th>
+                                            <th>结算类型</th>
                                             <th>录入人员</th>
                                             <th>结算金额</th>
-                                            <th>稽核状态</th>
                                             <th>稽核人</th>
                                             <th>稽核时间</th>
-                                            <th colspan="4">操作</th>
+                                            <th>稽核状态</th>
+                                            <th colspan="2">操作</th>
                                         </tr>
-                                        <tr>
-                                            <td><input type="checkbox"/></td>
-                                            <td>1</td>
-                                            <td>2020/07</td>
-                                            <td>大连</td>
-                                            <td>手机</td>
-                                            <td>8080</td>
-                                            <td>10</td>
-                                            <td>张三</td>
-                                            <td>未稽核</td>
-                                            <td>无</td>
-                                            <td>无</td>
-                                            <td colspan="2">编辑</td>
-                                            <td colspan="2">删除</td>
-                                        </tr>
+                                        <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+                                        <b:forEach items="${rpNetBalanceRecordTList}" var="rpNetBalanceRecordTList">
+                                            <tr>
+                                                <td><input type="checkbox"></td>
+                                                <td>${rpNetBalanceRecordTList.id}</td>
+                                                <td>${rpNetBalanceRecordTList.rpCityCodeT.cityName}</td>
+                                                <td>${rpNetBalanceRecordTList.rpProductCodeT.productName}</td>
+                                                <td>${rpNetBalanceRecordTList.rpBalanceSpCodeT.balanceSpName}</td>
+                                                <td>${rpNetBalanceRecordTList.balanceTypeCode}</td>
+                                                <td>${rpNetBalanceRecordTList.recordOperator}</td>
+                                                <td>${rpNetBalanceRecordTList.balanceFee}</td>
+                                                <td>${rpNetBalanceRecordTList.checkPerson}</td>
+                                                <td><fmt:formatDate type="date" value="${rpNetBalanceRecordTList.checkTime}"/></td>
+                                                <td>${rpNetBalanceRecordTList.checkStatus}</td>
+                                                <td><a href="#">编辑</a></td>
+                                                <td><a href="#">删除</a></td>
+                                            </tr>
+                                        </b:forEach>
                                     </table>
 
                                     <!--分页开始-->

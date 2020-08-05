@@ -40,7 +40,7 @@
                                             <option value="">全部</option>
                                             <%@taglib  uri="http://java.sun.com/jsp/jstl/core" prefix="city" %>
                                             <city:forEach items="${cityList}" var="city" >
-                                                <option value="${cityCode}">${city.cityName}</option>
+                                                <option value="${city.cityCode}">${city.cityName}</option>
                                             </city:forEach>
                                         </select>
                                     </div>
@@ -50,7 +50,7 @@
                                             <option value="">全部</option>
                                             <%@taglib  uri="http://java.sun.com/jsp/jstl/core" prefix="product" %>
                                             <product:forEach items="${productList}" var="product" >
-                                                <option value="${productCode}">${product.productName}</option>
+                                                <option value="${product.productCode}">${product.productName}</option>
                                             </product:forEach>
                                         </select>
                                     </div>
@@ -97,40 +97,37 @@
 
                             <table class="table table-bordered table-hover table-striped">
                                 <tr>
-                                    <th><input type="checkbox"/></th>
+                                    <th><input type="checkbox"></th>
                                     <th>序号</th>
-                                    <th>城市编号</th>
-                                    <th>产品编号</th>
-                                    <th>录入日期</th>
+                                    <th>城市</th>
+                                    <th>产品</th>
                                     <th>折扣率</th>
                                     <th>卡销售数量</th>
                                     <th>面值金额</th>
                                     <th>录入人员</th>
-                                    <th>稽核状态</th>
                                     <th>稽核人</th>
-                                    <th>稽核时间</th>
                                     <th>卡总金额</th>
-                                    <th>折扣后总金额</th>
-                                    <th colspan="4">操作</th>
+                                    <th>折后金额</th>
+                                    <th colspan="2">操作</th>
                                 </tr>
-                                <tr>
-                                    <td><input type="checkbox"/></td>
-                                    <td>1</td>
-                                    <td>大连</td>
-                                    <td>手机</td>
-                                    <td>2020/07/27</td>
-                                    <td>80%</td>
-                                    <td>10</td>
-                                    <td>100</td>
-                                    <td>张三</td>
-                                    <td>未稽核</td>
-                                    <td>无</td>
-                                    <td>无</td>
-                                    <td>2000</td>
-                                    <td>1800</td>
-                                    <td colspan="2">编辑</td>
-                                    <td colspan="2">删除</td>
-                                </tr>
+                                <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+                                <b:forEach items="${RpCardSaleRecordTList}" var="RpCardSaleRecordTList">
+                                    <tr>
+                                        <td><input type="checkbox"></td>
+                                        <td>${RpCardSaleRecordTList.id}</td>
+                                        <td>${RpCardSaleRecordTList.rpCityCodeT.cityName}</td>
+                                        <td>${RpCardSaleRecordTList.rpProductCodeT.productName}</td>
+                                        <td>${RpCardSaleRecordTList.discountRate}</td>
+                                        <td>${RpCardSaleRecordTList.cardSaleAmount}</td>
+                                        <td>${RpCardSaleRecordTList.cardParValueFee}</td>
+                                        <td>${RpCardSaleRecordTList.recordOperator}</td>
+                                        <td>${RpCardSaleRecordTList.checkPerson}</td>
+                                        <td>${RpCardSaleRecordTList.totalFee}</td>
+                                        <td>${RpCardSaleRecordTList.discountFee}</td>
+                                        <td><a href="#">编辑</a></td>
+                                        <td><a href="#">删除</a></td>
+                                    </tr>
+                                </b:forEach>
                             </table>
 
                             <!--分页开始-->

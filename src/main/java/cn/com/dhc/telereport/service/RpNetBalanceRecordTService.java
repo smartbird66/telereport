@@ -19,6 +19,6 @@ public class RpNetBalanceRecordTService {
 		RpNetBalanceRecordT rpNetBalanceRecordT = new RpNetBalanceRecordT();
 		BeanUtils.copyProperties(rpNetBalanceRecordTForm, rpNetBalanceRecordT);
 		
-		return rpNetBalanceRecordTMapper.slelectByInfo(rpNetBalanceRecordT);
+		return rpNetBalanceRecordTMapper.selectByInfo(rpNetBalanceRecordT);
 	}
 }
