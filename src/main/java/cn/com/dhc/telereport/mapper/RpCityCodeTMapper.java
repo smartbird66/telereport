@@ -5,7 +5,9 @@ import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 
 import cn.com.dhc.telereport.entity.RpCityCodeT;
+import org.springframework.stereotype.Component;
 
+@Component
 public interface RpCityCodeTMapper {
 
 	/**

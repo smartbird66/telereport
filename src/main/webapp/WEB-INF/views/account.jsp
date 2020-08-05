@@ -5,7 +5,8 @@
 <head>
     <%@ include file="../common/head.jsp" %>
 </head>
-<body>
+<body >
+
   	<!--导航栏开始-->
 	<%@ include file="../common/nav.jsp" %>
   	<!--导航栏结束-->
@@ -264,4 +265,31 @@
 	</div>
 	<%@ include file="../common/foot.jsp" %>
 </body>
+<style type="text/css">
+
+
+</style>
+<script type="text/javascript">
+
+	function displayDate()
+	{
+		$(this).attr('href','');
+		$(this).attr('aria-controls','');
+		alert("您没用录入权限");
+
+		window.location.href="http://localhost:8080/imputation/account"
+
+	}
+	function displayDate2()
+	{
+		$(this).attr('href','');
+		$(this).attr('aria-controls','');
+		alert("您没用录入权限");
+
+		window.location.href="http://localhost:8080/imputation/account"
+
+	}
+	/*用window.onload调用myfun()*/
+	//不要括号
+</script>
 </html>

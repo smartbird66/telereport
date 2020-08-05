@@ -245,4 +245,28 @@
     </script>
     <%@ include file="../../common/foot.jsp" %>
 </body>
+<script type="text/javascript">
+
+    function displayDate()
+    {
+        $(this).attr('href','');
+        $(this).attr('aria-controls','');
+        alert("您没用录入权限");
+
+        window.location.href="http://localhost:8080/shourujihe/account"
+
+    }
+    function displayDate1()
+    {
+        $(this).attr('href','');
+        $(this).attr('aria-controls','');
+        alert("您没用归集权限");
+
+        window.location.href="http://localhost:8080/shourujihe/account"
+
+    }
+
+    /*用window.onload调用myfun()*/
+    //不要括号
+</script>
 </html>

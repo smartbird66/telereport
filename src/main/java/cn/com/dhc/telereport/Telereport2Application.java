@@ -10,6 +10,7 @@ public class Telereport2Application {
 
     public static void main(String[] args) {
         SpringApplication.run(Telereport2Application.class, args);
+
     }
 
 }
